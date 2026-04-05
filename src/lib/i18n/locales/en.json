@@ -36,6 +36,22 @@
 
   "close.no_transactions": "No transactions today — nothing to close.",
 
+  "dashboard.title": "Dashboard",
+  "dashboard.today": "Today",
+  "dashboard.this_month": "This month",
+  "dashboard.revenue": "Revenue",
+  "dashboard.transactions": "Transactions",
+  "dashboard.cannabis_dispensed": "Cannabis dispensed",
+  "dashboard.members_served": "Members served",
+  "dashboard.active_members": "Active members",
+  "dashboard.expired_members": "Expired",
+  "dashboard.expiring_soon": "Expiring soon",
+  "dashboard.low_stock_alerts": "Stock alerts",
+  "dashboard.top_products": "Top products this month",
+  "dashboard.recent_transactions": "Recent transactions",
+  "dashboard.no_alerts": "All stock in order",
+  "dashboard.no_transactions_today": "No transactions today",
+
   "error.title": "Something went wrong",
   "error.description": "An unexpected error occurred.",
   "error.retry": "Try again",

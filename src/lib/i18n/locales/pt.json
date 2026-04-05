@@ -36,6 +36,22 @@
 
   "close.no_transactions": "Sem transações hoje — nada para fechar.",
 
+  "dashboard.title": "Painel de controlo",
+  "dashboard.today": "Hoje",
+  "dashboard.this_month": "Este mês",
+  "dashboard.revenue": "Receita",
+  "dashboard.transactions": "Transações",
+  "dashboard.cannabis_dispensed": "Cannabis dispensado",
+  "dashboard.members_served": "Sócios atendidos",
+  "dashboard.active_members": "Sócios ativos",
+  "dashboard.expired_members": "Expirados",
+  "dashboard.expiring_soon": "A expirar em breve",
+  "dashboard.low_stock_alerts": "Alertas de stock",
+  "dashboard.top_products": "Top produtos do mês",
+  "dashboard.recent_transactions": "Transações recentes",
+  "dashboard.no_alerts": "Todo o stock em ordem",
+  "dashboard.no_transactions_today": "Sem transações hoje",
+
   "error.title": "Algo correu mal",
   "error.description": "Ocorreu um erro inesperado.",
   "error.retry": "Tentar novamente",
