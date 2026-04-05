@@ -33,7 +33,7 @@ export function MemberRenew({ memberId, currentEnd }: Props) {
     setLoading(false)
 
     if (result.success) {
-      toast.success('Membresía renovada')
+      toast.success(t('toast.membership_renewed'))
       router.refresh()
     } else {
       toast.error(result.error)

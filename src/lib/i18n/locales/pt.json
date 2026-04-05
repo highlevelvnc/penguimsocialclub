@@ -17,6 +17,31 @@
   "common.inactive": "Inativo",
   "common.yes": "Sim",
   "common.no": "Não",
+  "common.all": "Todos",
+  "common.optional": "Opcional",
+
+  "toast.member_created": "Sócio criado",
+  "toast.member_updated": "Sócio atualizado",
+  "toast.product_created": "Produto criado",
+  "toast.product_updated": "Produto atualizado",
+  "toast.staff_created": "Pessoal criado",
+  "toast.staff_updated": "Pessoal atualizado",
+  "toast.staff_activated": "Pessoal ativado",
+  "toast.staff_deactivated": "Pessoal desativado",
+  "toast.membership_renewed": "Membria renovada",
+
+  "staff.email_required_note": "Administradores precisam de email para aceder",
+  "staff.pin_keep_current": "deixar vazio para manter atual",
+  "staff.pin_placeholder": "4-6 dígitos",
+
+  "close.no_transactions": "Sem transações hoje — nada para fechar.",
+
+  "error.title": "Algo correu mal",
+  "error.description": "Ocorreu um erro inesperado.",
+  "error.retry": "Tentar novamente",
+  "error.not_found_title": "Página não encontrada",
+  "error.not_found_description": "A página que procura não existe.",
+  "error.go_home": "Voltar ao início",
 
   "auth.login": "Entrar",
   "auth.logout": "Sair",

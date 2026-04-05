@@ -26,6 +26,7 @@ export function PosProductCard({ product, subcategoryKey, categoryImage, onSelec
       type="button"
       onClick={() => onSelect(product)}
       disabled={outOfStock}
+      aria-label={`${product.name} — ${priceLabel}${outOfStock ? ` (${t('product.out_of_stock')})` : ''}`}
       className={`
         group relative flex flex-col rounded-2xl border text-left transition-all duration-200 overflow-hidden
         min-h-[130px]

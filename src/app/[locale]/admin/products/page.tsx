@@ -39,7 +39,7 @@ export default async function ProductsPage({
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-xl font-bold text-zinc-900">{tr['product.title']}</h1>
-          <p className="text-sm text-zinc-400 mt-0.5">{products.length} productos</p>
+          <p className="text-sm text-zinc-400 mt-0.5">{products.length} {tr['product.title'].toLowerCase()}</p>
         </div>
         <Link
           href={`/${locale}/admin/products/new`}

@@ -28,7 +28,7 @@ export default async function NewProductPage({
       </div>
       <div>
         <h1 className="text-xl font-bold text-zinc-900">{tr['product.create']}</h1>
-        <p className="text-sm text-zinc-400 mt-0.5">Añadir nuevo producto al catálogo</p>
+        <p className="text-sm text-zinc-400 mt-0.5">{tr['product.title']}</p>
       </div>
       <ProductForm
         mode="create"

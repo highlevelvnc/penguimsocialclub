@@ -24,7 +24,7 @@ export function StaffPageClient({ staff, translations: tr, locale }: Props) {
   async function handleToggleActive(id: string, currentActive: boolean) {
     const result = await toggleStaffActive(id, !currentActive)
     if (result.success) {
-      toast.success(currentActive ? 'Staff deactivado' : 'Staff activado')
+      toast.success(t(currentActive ? 'toast.staff_deactivated' : 'toast.staff_activated'))
       router.refresh()
     } else {
       toast.error(result.error)
@@ -95,7 +95,7 @@ export function StaffPageClient({ staff, translations: tr, locale }: Props) {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-xl font-bold text-zinc-900">{tr['staff.title']}</h1>
-          <p className="text-sm text-zinc-400 mt-0.5">{staff.length} {staff.length === 1 ? 'persona' : 'personas'}</p>
+          <p className="text-sm text-zinc-400 mt-0.5">{staff.length} {tr['staff.title'].toLowerCase()}</p>
         </div>
         <button
           type="button"

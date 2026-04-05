@@ -47,7 +47,7 @@ export function MemberStatusFilter({ currentStatus, currentSearch, locale }: Pro
               isActive ? colorClass : inactiveClass
             }`}
           >
-            {s === null ? t('common.all') || 'Todos' : t(`member.status.${s}`)}
+            {s === null ? t('common.all') : t(`member.status.${s}`)}
           </button>
         )
       })}

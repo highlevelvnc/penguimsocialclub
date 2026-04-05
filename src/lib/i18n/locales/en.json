@@ -17,6 +17,31 @@
   "common.inactive": "Inactive",
   "common.yes": "Yes",
   "common.no": "No",
+  "common.all": "All",
+  "common.optional": "Optional",
+
+  "toast.member_created": "Member created",
+  "toast.member_updated": "Member updated",
+  "toast.product_created": "Product created",
+  "toast.product_updated": "Product updated",
+  "toast.staff_created": "Staff created",
+  "toast.staff_updated": "Staff updated",
+  "toast.staff_activated": "Staff activated",
+  "toast.staff_deactivated": "Staff deactivated",
+  "toast.membership_renewed": "Membership renewed",
+
+  "staff.email_required_note": "Admin users need an email to log in",
+  "staff.pin_keep_current": "leave empty to keep current",
+  "staff.pin_placeholder": "4-6 digits",
+
+  "close.no_transactions": "No transactions today — nothing to close.",
+
+  "error.title": "Something went wrong",
+  "error.description": "An unexpected error occurred.",
+  "error.retry": "Try again",
+  "error.not_found_title": "Page not found",
+  "error.not_found_description": "The page you're looking for doesn't exist.",
+  "error.go_home": "Go home",
 
   "auth.login": "Sign in",
   "auth.logout": "Sign out",

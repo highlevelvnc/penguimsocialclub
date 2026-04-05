@@ -329,7 +329,7 @@ export default function PosPage() {
       </div>
 
       {/* Right: cart panel */}
-      <div className="w-80 shrink-0 lg:w-96">
+      <div className="w-64 shrink-0 md:w-72 lg:w-80 xl:w-96">
         <CartPanel
           cart={cart}
           remainingDaily={remaining.daily}

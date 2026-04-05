@@ -65,7 +65,7 @@ export function CartPanel({
               <div key={item.id} className="flex items-start justify-between px-4 py-2.5 hover:bg-zinc-800/30 group transition-colors">
                 <div className="flex-1 min-w-0">
                   <div className="text-sm font-medium text-zinc-200 truncate">{item.productName}</div>
-                  <div className="text-[11px] text-zinc-500 tabular-nums mt-0.5">
+                  <div className="text-[11px] text-zinc-400 tabular-nums mt-0.5">
                     {item.unitType === 'gram'
                       ? `${item.quantity}g \u00D7 \u20AC${item.unitPrice.toFixed(2)}/g`
                       : `${item.quantity} \u00D7 \u20AC${item.unitPrice.toFixed(2)}`}
@@ -82,7 +82,7 @@ export function CartPanel({
                     type="button"
                     onClick={() => onRemoveItem(item.id)}
                     className="opacity-0 group-hover:opacity-100 flex h-5 w-5 items-center justify-center rounded-full bg-zinc-800 text-zinc-500 hover:bg-red-500/20 hover:text-red-400 text-xs transition-all"
-                    aria-label="Remove"
+                    aria-label={`${t('common.delete')} ${item.productName}`}
                   >
                     {'\u00D7'}
                   </button>

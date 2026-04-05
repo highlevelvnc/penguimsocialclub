@@ -26,7 +26,7 @@ export default async function NewMemberPage({
       </div>
       <div>
         <h1 className="text-xl font-bold text-zinc-900">{tr['member.create']}</h1>
-        <p className="text-sm text-zinc-400 mt-0.5">Nuevo socio del club</p>
+        <p className="text-sm text-zinc-400 mt-0.5">{tr['member.title']}</p>
       </div>
       <MemberForm
         mode="create"

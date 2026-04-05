@@ -73,12 +73,15 @@ export function PosMemberSearch({ onSelect }: Props) {
         >
           <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
         </svg>
+        <label htmlFor="pos-member-search" className="sr-only">{t('pos.search_member')}</label>
         <input
           ref={inputRef}
+          id="pos-member-search"
           type="text"
           placeholder={t('pos.search_member')}
           value={query}
           onChange={(e) => handleChange(e.target.value)}
+          aria-label={t('pos.search_member')}
           className="w-full h-14 rounded-2xl border border-zinc-700 bg-zinc-800/80 pl-12 pr-4 text-base text-white placeholder:text-zinc-500 shadow-lg shadow-black/20 outline-none focus:border-emerald-500/50 focus:ring-4 focus:ring-emerald-500/10 transition-all backdrop-blur-md"
         />
         {loading && (

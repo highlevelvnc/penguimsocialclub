@@ -64,7 +64,9 @@ export function GramInput({ productName, pricePerGram, maxGrams, onConfirm, onCa
       {/* Custom input + total */}
       <div className="flex items-center gap-3">
         <div className="relative">
+          <label htmlFor="gram-input" className="sr-only">{t('pos.enter_grams')}</label>
           <Input
+            id="gram-input"
             type="number"
             step="0.1"
             min="0.1"

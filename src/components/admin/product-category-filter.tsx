@@ -42,7 +42,7 @@ export function ProductCategoryFilter({ currentCategory, locale }: Props) {
             : 'border-zinc-200 text-zinc-500 hover:border-zinc-300 hover:text-zinc-700'
         }`}
       >
-        {t('common.all') || 'Todos'}
+        {t('common.all')}
       </button>
       {PRODUCT_CATEGORIES.map((cat) => (
         <button

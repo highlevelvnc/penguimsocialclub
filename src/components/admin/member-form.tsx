@@ -109,7 +109,7 @@ export function MemberForm({ mode, memberId, initialData, defaultLimits }: Membe
     setLoading(false)
 
     if (result.success) {
-      toast.success(mode === 'create' ? 'Socio creado' : 'Socio actualizado')
+      toast.success(t(mode === 'create' ? 'toast.member_created' : 'toast.member_updated'))
       if (mode === 'create' && 'id' in result) {
         router.push(`/${locale}/admin/members/${result.id}`)
       }

@@ -99,12 +99,12 @@ export function DailyCloseSummary({ date, summary, alreadyClosed }: Props) {
           </div>
           <div>
             <p className="text-sm font-semibold text-emerald-800">{t('close.already_closed')}</p>
-            <p className="text-xs text-emerald-600">Cierre registrado correctamente</p>
+            <p className="text-xs text-emerald-600">{t('close.already_closed')}</p>
           </div>
         </div>
       ) : (
         <div className="rounded-xl border border-zinc-200 bg-white p-5 space-y-4">
-          <h3 className="text-sm font-semibold text-zinc-900">{t('close.expected_cash')} · Reconciliación</h3>
+          <h3 className="text-sm font-semibold text-zinc-900">{t('close.expected_cash')}</h3>
 
           <div className="grid grid-cols-3 gap-3 items-end">
             {/* Expected */}
@@ -152,7 +152,7 @@ export function DailyCloseSummary({ date, summary, alreadyClosed }: Props) {
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
               rows={2}
-              placeholder={t('common.optional') || 'Optional'}
+              placeholder={t('common.optional')}
               className="resize-none text-sm"
             />
           </div>
@@ -176,7 +176,7 @@ export function DailyCloseSummary({ date, summary, alreadyClosed }: Props) {
 
           {summary.total_transactions === 0 && (
             <p className="text-xs text-zinc-400 text-center">
-              {t('close.no_transactions') || 'No transactions today — nothing to close.'}
+              {t('close.no_transactions')}
             </p>
           )}
         </div>

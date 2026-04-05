@@ -70,7 +70,7 @@ export function StaffForm({ mode, staffId, initialData, onSuccess }: StaffFormPr
     setLoading(false)
 
     if (result.success) {
-      toast.success(mode === 'create' ? 'Staff created' : 'Staff updated')
+      toast.success(t(mode === 'create' ? 'toast.staff_created' : 'toast.staff_updated'))
       setPin('')
       if (onSuccess) {
         onSuccess()
@@ -133,11 +133,11 @@ export function StaffForm({ mode, staffId, initialData, onSuccess }: StaffFormPr
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required={emailRequired}
-              placeholder={emailRequired ? 'Required for admin' : 'Optional'}
+              placeholder={emailRequired ? t('staff.email_required_note') : t('common.optional')}
             />
             {emailRequired && (
               <p className="text-xs text-muted-foreground">
-                Admin users need an email for Supabase Auth login
+                {t('staff.email_required_note')}
               </p>
             )}
           </div>
@@ -148,7 +148,7 @@ export function StaffForm({ mode, staffId, initialData, onSuccess }: StaffFormPr
               {t('staff.pin')}
               {mode === 'edit' && (
                 <span className="text-xs text-muted-foreground ml-2">
-                  (leave empty to keep current)
+                  ({t('staff.pin_keep_current')})
                 </span>
               )}
             </Label>
@@ -162,7 +162,7 @@ export function StaffForm({ mode, staffId, initialData, onSuccess }: StaffFormPr
               value={pin}
               onChange={(e) => setPin(e.target.value.replace(/\D/g, '').slice(0, 6))}
               required={mode === 'create'}
-              placeholder="4-6 digits"
+              placeholder={t('staff.pin_placeholder')}
               className="w-40"
             />
           </div>

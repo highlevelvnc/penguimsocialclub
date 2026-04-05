@@ -110,7 +110,7 @@ export function ProductForm({ mode, productId, initialData, subcategories }: Pro
     setLoading(false)
 
     if (result.success) {
-      toast.success(mode === 'create' ? 'Producto creado' : 'Producto actualizado')
+      toast.success(t(mode === 'create' ? 'toast.product_created' : 'toast.product_updated'))
       if (mode === 'create' && 'id' in result) {
         router.push(`/${locale}/admin/products/${result.id}`)
       }
