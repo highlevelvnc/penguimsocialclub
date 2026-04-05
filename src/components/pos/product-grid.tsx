@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Image from 'next/image'
 import { useT } from '@/lib/i18n/client'
 import { PRODUCT_CATEGORIES } from '@/lib/constants'
 import type { Product, ProductCategory } from '@/lib/supabase/types'
@@ -23,14 +24,15 @@ interface Props {
   onAddUnitProduct: (product: Product, quantity: number) => void
 }
 
-const categoryIcons: Record<ProductCategory, string> = {
-  flower: '\uD83C\uDF3F',
-  hash: '\uD83D\uDFE4',
-  extraction: '\uD83D\uDCA7',
-  vape: '\uD83D\uDCA8',
-  edible: '\uD83C\uDF6A',
-  beverage: '\uD83C\uDF75',
-  accessory: '\uD83D\uDEE0\uFE0F',
+/** Maps each category to its product photography */
+const categoryImages: Record<ProductCategory, string> = {
+  flower: '/flower.png',
+  hash: '/hash.png',
+  extraction: '/iceolator.png',
+  vape: '/oilpen.png',
+  edible: '/comestiveis.png',
+  beverage: '/comestiveis.png',
+  accessory: '/sedas.png',
 }
 
 export function PosProductGrid({
@@ -86,9 +88,9 @@ export function PosProductGrid({
   }
 
   return (
-    <div className="flex h-full flex-col bg-white rounded-t-xl border border-zinc-200 overflow-hidden">
+    <div className="flex h-full flex-col overflow-hidden rounded-t-2xl border border-zinc-800 bg-zinc-900/50">
       {/* Category tabs */}
-      <div className="flex gap-1 border-b border-zinc-100 px-3 py-2 overflow-x-auto bg-zinc-50/50">
+      <div className="flex gap-1 border-b border-zinc-800 px-3 py-2 overflow-x-auto bg-zinc-900/80">
         {PRODUCT_CATEGORIES.map((cat) => {
           const count = categoryCounts.get(cat) ?? 0
           if (count === 0) return null
@@ -99,15 +101,23 @@ export function PosProductGrid({
               type="button"
               onClick={() => { setActiveCategory(cat); setSelectedProduct(null) }}
               className={`
-                flex items-center gap-1.5 whitespace-nowrap rounded-lg px-3 py-1.5 text-xs font-medium transition-all
+                flex items-center gap-2 whitespace-nowrap rounded-xl px-3 py-1.5 text-xs font-medium transition-all
                 ${isActive
-                  ? 'bg-zinc-900 text-white shadow-sm'
-                  : 'text-zinc-500 hover:bg-zinc-100 hover:text-zinc-700'}
+                  ? 'bg-zinc-800 text-white shadow-sm ring-1 ring-zinc-700'
+                  : 'text-zinc-500 hover:bg-zinc-800/50 hover:text-zinc-300'}
               `}
             >
-              <span className="text-sm">{categoryIcons[cat]}</span>
+              <div className="relative h-5 w-5 flex-shrink-0 overflow-hidden rounded">
+                <Image
+                  src={categoryImages[cat]}
+                  alt=""
+                  width={20}
+                  height={20}
+                  className="h-full w-full object-cover"
+                />
+              </div>
               {t(`product.category.${cat}`)}
-              <span className={`text-[10px] ${isActive ? 'text-zinc-400' : 'text-zinc-400'}`}>
+              <span className={`text-[10px] ${isActive ? 'text-zinc-400' : 'text-zinc-600'}`}>
                 {count}
               </span>
             </button>
@@ -117,7 +127,7 @@ export function PosProductGrid({
 
       {/* Input overlay */}
       {selectedProduct && (
-        <div className="border-b border-zinc-200 px-3 py-3 bg-white">
+        <div className="border-b border-zinc-800 px-3 py-3 bg-zinc-900">
           {selectedProduct.unit_type === 'gram' ? (
             <GramInput
               productName={selectedProduct.name}
@@ -127,16 +137,16 @@ export function PosProductGrid({
               onCancel={handleCancel}
             />
           ) : (
-            <div className="rounded-xl border border-blue-200 bg-blue-50/50 p-4 space-y-3">
+            <div className="rounded-xl border border-zinc-700 bg-zinc-800/50 p-4 space-y-3">
               <div className="flex items-center justify-between">
-                <span className="font-semibold text-sm text-zinc-900">{selectedProduct.name}</span>
-                <span className="text-xs text-zinc-500">{'\u20AC'}{selectedProduct.price_per_unit.toFixed(2)}/ud</span>
+                <span className="font-semibold text-sm text-white">{selectedProduct.name}</span>
+                <span className="text-xs text-zinc-400">{'\u20AC'}{selectedProduct.price_per_unit.toFixed(2)}/ud</span>
               </div>
               <div className="flex items-center gap-3">
-                <div className="flex items-center rounded-lg border border-zinc-200 bg-white overflow-hidden">
+                <div className="flex items-center rounded-lg border border-zinc-700 bg-zinc-800 overflow-hidden">
                   <button
                     type="button"
-                    className="px-3 py-2 text-lg text-zinc-500 hover:bg-zinc-50 transition-colors"
+                    className="px-3 py-2 text-lg text-zinc-400 hover:text-white hover:bg-zinc-700 transition-colors"
                     onClick={() => setUnitQty(String(Math.max(1, (parseInt(unitQty) || 1) - 1)))}
                   >
                     -
@@ -146,24 +156,24 @@ export function PosProductGrid({
                     min="1"
                     value={unitQty}
                     onChange={(e) => setUnitQty(e.target.value)}
-                    className="w-14 text-center tabular-nums font-semibold border-0 shadow-none"
+                    className="w-14 text-center tabular-nums font-semibold border-0 shadow-none bg-transparent text-white"
                   />
                   <button
                     type="button"
-                    className="px-3 py-2 text-lg text-zinc-500 hover:bg-zinc-50 transition-colors"
+                    className="px-3 py-2 text-lg text-zinc-400 hover:text-white hover:bg-zinc-700 transition-colors"
                     onClick={() => setUnitQty(String((parseInt(unitQty) || 1) + 1))}
                   >
                     +
                   </button>
                 </div>
                 <div className="flex items-center gap-1.5">
-                  <span className="text-zinc-400">=</span>
-                  <span className="text-lg font-bold text-zinc-900 tabular-nums">
+                  <span className="text-zinc-500">=</span>
+                  <span className="text-lg font-bold text-white tabular-nums">
                     {'\u20AC'}{((parseInt(unitQty) || 1) * selectedProduct.price_per_unit).toFixed(2)}
                   </span>
                 </div>
                 {selectedProduct.gram_equivalent && (
-                  <span className="text-xs text-zinc-400 bg-zinc-100 rounded px-1.5 py-0.5">
+                  <span className="text-xs text-zinc-500 bg-zinc-800 rounded px-1.5 py-0.5 tabular-nums">
                     {((parseInt(unitQty) || 1) * selectedProduct.gram_equivalent).toFixed(2)}g
                   </span>
                 )}
@@ -171,14 +181,14 @@ export function PosProductGrid({
                 <button
                   type="button"
                   onClick={handleCancel}
-                  className="rounded-lg px-3 py-2 text-sm text-zinc-500 hover:bg-zinc-100 transition-colors"
+                  className="rounded-lg px-3 py-2 text-sm text-zinc-400 hover:bg-zinc-700 hover:text-white transition-colors"
                 >
                   {t('common.cancel')}
                 </button>
                 <Button
                   size="sm"
                   onClick={handleUnitConfirm}
-                  className="bg-blue-500 hover:bg-blue-600 text-white rounded-lg px-4"
+                  className="bg-emerald-500 hover:bg-emerald-400 text-white rounded-lg px-4"
                 >
                   {t('common.confirm')}
                 </Button>
@@ -192,15 +202,16 @@ export function PosProductGrid({
       <div className="flex-1 overflow-y-auto p-3">
         {filtered.length === 0 ? (
           <div className="flex h-full items-center justify-center">
-            <p className="text-sm text-zinc-400">{t('common.no_results')}</p>
+            <p className="text-sm text-zinc-600">{t('common.no_results')}</p>
           </div>
         ) : (
-          <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4">
+          <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-4">
             {filtered.map((product) => (
               <PosProductCard
                 key={product.id}
                 product={product}
                 subcategoryKey={product.subcategory_id ? (subMap.get(product.subcategory_id) ?? null) : null}
+                categoryImage={categoryImages[product.category as ProductCategory]}
                 onSelect={handleProductSelect}
               />
             ))}

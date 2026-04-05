@@ -2,6 +2,7 @@
 
 import { useState, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
+import Image from 'next/image'
 import { useT, useLocale } from '@/lib/i18n/client'
 import { validatePin } from '@/actions/auth'
 
@@ -46,22 +47,34 @@ export default function PosLockPage() {
   }, [pin, locale, router, t])
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-br from-zinc-950 via-zinc-900 to-zinc-950 text-white">
-      {/* Background decoration */}
-      <div className="pointer-events-none fixed inset-0 overflow-hidden">
-        <div className="absolute -top-40 -right-40 h-80 w-80 rounded-full bg-emerald-500/5 blur-3xl" />
-        <div className="absolute -bottom-40 -left-40 h-80 w-80 rounded-full bg-emerald-500/5 blur-3xl" />
-      </div>
+    <div className="relative flex min-h-screen flex-col items-center justify-center text-white overflow-hidden">
+      {/* Background image */}
+      <Image
+        src="/background2.png"
+        alt=""
+        fill
+        className="object-cover"
+        priority
+        quality={60}
+      />
+      {/* Dark overlay for readability */}
+      <div className="absolute inset-0 bg-zinc-950/85 backdrop-blur-sm" />
 
       <div className="relative z-10 w-full max-w-sm px-6 space-y-10">
-        {/* Brand */}
+        {/* Brand — real logo */}
         <div className="text-center space-y-3">
-          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-emerald-500/10 border border-emerald-500/20">
-            <span className="text-3xl">🐧</span>
+          <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-2xl bg-white/10 border border-white/10 backdrop-blur-md shadow-2xl">
+            <Image
+              src="/logo.png"
+              alt="Penguin Social Club"
+              width={56}
+              height={56}
+              className="rounded-lg"
+            />
           </div>
           <div>
-            <h1 className="text-2xl font-bold tracking-tight">{t('app.name')}</h1>
-            <p className="mt-1 text-sm text-zinc-500">{t('auth.enter_pin')}</p>
+            <h1 className="text-2xl font-bold tracking-tight">Penguin Social Club</h1>
+            <p className="mt-1 text-sm text-zinc-400">{t('auth.enter_pin')}</p>
           </div>
         </div>
 
@@ -73,7 +86,7 @@ export default function PosLockPage() {
               className={`h-3.5 w-3.5 rounded-full transition-all duration-200 ${
                 i < pin.length
                   ? 'bg-emerald-400 scale-110 shadow-lg shadow-emerald-400/30'
-                  : 'bg-zinc-700/50 border border-zinc-600/50'
+                  : 'bg-white/10 border border-white/20'
               }`}
             />
           ))}
@@ -82,7 +95,7 @@ export default function PosLockPage() {
         {/* Error */}
         <div className="h-5 text-center">
           {error && (
-            <p className="text-sm text-red-400 animate-in fade-in">{error}</p>
+            <p className="text-sm text-red-400">{error}</p>
           )}
         </div>
 
@@ -92,7 +105,7 @@ export default function PosLockPage() {
             <button
               key={digit}
               type="button"
-              className="flex h-16 items-center justify-center rounded-xl bg-white/5 text-2xl font-medium text-white backdrop-blur-sm border border-white/10 transition-all duration-150 hover:bg-white/10 hover:border-white/20 active:scale-95 active:bg-white/15 disabled:opacity-30"
+              className="flex h-16 items-center justify-center rounded-2xl bg-white/5 text-2xl font-medium text-white backdrop-blur-sm border border-white/10 transition-all duration-150 hover:bg-white/10 hover:border-white/20 active:scale-95 active:bg-white/15 disabled:opacity-30"
               onClick={() => handleDigit(digit)}
               disabled={loading}
             >
@@ -101,7 +114,7 @@ export default function PosLockPage() {
           ))}
           <button
             type="button"
-            className="flex h-16 items-center justify-center rounded-xl bg-white/5 text-xl text-zinc-400 backdrop-blur-sm border border-white/10 transition-all duration-150 hover:bg-white/10 active:scale-95 disabled:opacity-30"
+            className="flex h-16 items-center justify-center rounded-2xl bg-white/5 text-xl text-zinc-400 backdrop-blur-sm border border-white/10 transition-all duration-150 hover:bg-white/10 active:scale-95 disabled:opacity-30"
             onClick={handleBackspace}
             disabled={loading}
           >
@@ -109,7 +122,7 @@ export default function PosLockPage() {
           </button>
           <button
             type="button"
-            className="flex h-16 items-center justify-center rounded-xl bg-white/5 text-2xl font-medium text-white backdrop-blur-sm border border-white/10 transition-all duration-150 hover:bg-white/10 hover:border-white/20 active:scale-95 active:bg-white/15 disabled:opacity-30"
+            className="flex h-16 items-center justify-center rounded-2xl bg-white/5 text-2xl font-medium text-white backdrop-blur-sm border border-white/10 transition-all duration-150 hover:bg-white/10 hover:border-white/20 active:scale-95 active:bg-white/15 disabled:opacity-30"
             onClick={() => handleDigit('0')}
             disabled={loading}
           >
@@ -117,7 +130,7 @@ export default function PosLockPage() {
           </button>
           <button
             type="button"
-            className={`flex h-16 items-center justify-center rounded-xl text-sm font-semibold uppercase tracking-wider transition-all duration-150 active:scale-95 ${
+            className={`flex h-16 items-center justify-center rounded-2xl text-sm font-semibold uppercase tracking-wider transition-all duration-150 active:scale-95 ${
               pin.length >= 4
                 ? 'bg-emerald-500 text-white hover:bg-emerald-400 shadow-lg shadow-emerald-500/25'
                 : 'bg-zinc-800 text-zinc-500 cursor-not-allowed'

@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
+import Image from 'next/image'
 import { useT } from '@/lib/i18n/client'
 import { createClient } from '@/lib/supabase/client'
 import { SHOP_ID } from '@/lib/constants'
@@ -186,7 +187,6 @@ export default function PosPage() {
     setCheckingOut(false)
 
     if (!result.success) {
-      // Translate the error and show toast — cart stays intact
       switch (result.error) {
         case 'MEMBER_NOT_ACTIVE':
           toast.error(t('pos.error.member_not_active'))
@@ -268,14 +268,28 @@ export default function PosPage() {
 
   if (phase === 'search' || !member || !limits) {
     return (
-      <div className="flex h-full flex-col items-center justify-center bg-gradient-to-br from-zinc-50 to-white px-4">
-        <div className="w-full max-w-md space-y-6 text-center">
-          <div className="space-y-2">
-            <span className="text-4xl">🐧</span>
-            <h2 className="text-lg font-semibold text-zinc-900">
+      <div className="relative flex h-full flex-col items-center justify-center px-4 overflow-hidden">
+        {/* Background image */}
+        <Image
+          src="/background.png"
+          alt=""
+          fill
+          className="object-cover opacity-10"
+          quality={40}
+        />
+        <div className="relative z-10 w-full max-w-md space-y-8 text-center">
+          <div className="space-y-3">
+            <Image
+              src="/logo.png"
+              alt="Penguin Social Club"
+              width={56}
+              height={56}
+              className="mx-auto rounded-xl"
+            />
+            <h2 className="text-lg font-semibold text-zinc-100">
               {t('pos.select_member')}
             </h2>
-            <p className="text-sm text-zinc-400">
+            <p className="text-sm text-zinc-500">
               {t('pos.search_member')}
             </p>
           </div>
@@ -287,7 +301,7 @@ export default function PosPage() {
 
   // phase === 'dispensing'
   return (
-    <div className="flex h-full bg-zinc-50">
+    <div className="flex h-full">
       {/* Left: member card + product grid */}
       <div className="flex flex-1 flex-col overflow-hidden">
         {/* Member card */}

@@ -29,10 +29,10 @@ export function GramInput({ productName, pricePerGram, maxGrams, onConfirm, onCa
   }
 
   return (
-    <div className="rounded-xl border border-emerald-200 bg-emerald-50/50 p-4 space-y-3">
+    <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-4 space-y-3">
       <div className="flex items-center justify-between">
-        <span className="font-semibold text-sm text-zinc-900">{productName}</span>
-        <span className="text-xs text-zinc-500">{'\u20AC'}{pricePerGram.toFixed(2)}/g</span>
+        <span className="font-semibold text-sm text-zinc-100">{productName}</span>
+        <span className="text-xs text-zinc-400">{'\u20AC'}{pricePerGram.toFixed(2)}/g</span>
       </div>
 
       {/* Presets */}
@@ -47,12 +47,12 @@ export function GramInput({ productName, pricePerGram, maxGrams, onConfirm, onCa
               onClick={() => handlePreset(g)}
               disabled={disabled}
               className={`
-                flex-1 rounded-lg py-2 text-sm font-medium tabular-nums transition-all
+                flex-1 rounded-lg py-2.5 text-sm font-medium tabular-nums transition-all
                 ${isSelected
-                  ? 'bg-emerald-500 text-white shadow-sm'
+                  ? 'bg-emerald-500 text-white shadow-sm shadow-emerald-500/25'
                   : disabled
-                    ? 'bg-zinc-100 text-zinc-300 cursor-not-allowed'
-                    : 'bg-white text-zinc-700 border border-zinc-200 hover:border-emerald-300 hover:text-emerald-700'}
+                    ? 'bg-zinc-800 text-zinc-600 cursor-not-allowed'
+                    : 'bg-zinc-800 text-zinc-300 border border-zinc-700 hover:border-emerald-500/30 hover:text-emerald-400'}
               `}
             >
               {g}g
@@ -72,16 +72,16 @@ export function GramInput({ productName, pricePerGram, maxGrams, onConfirm, onCa
             value={value}
             onChange={(e) => setValue(e.target.value)}
             placeholder="0.0"
-            className="w-24 pr-6 tabular-nums text-center font-medium"
+            className="w-24 pr-6 tabular-nums text-center font-medium bg-zinc-800 border-zinc-700 text-white"
             autoFocus
           />
-          <span className="absolute right-2 top-1/2 -translate-y-1/2 text-xs text-zinc-400">g</span>
+          <span className="absolute right-2 top-1/2 -translate-y-1/2 text-xs text-zinc-500">g</span>
         </div>
 
         {grams > 0 && (
           <div className="flex items-center gap-1.5">
-            <span className="text-zinc-400">=</span>
-            <span className="text-lg font-bold text-zinc-900 tabular-nums">
+            <span className="text-zinc-600">=</span>
+            <span className="text-lg font-bold text-white tabular-nums">
               {'\u20AC'}{total.toFixed(2)}
             </span>
           </div>
@@ -92,7 +92,7 @@ export function GramInput({ productName, pricePerGram, maxGrams, onConfirm, onCa
         <button
           type="button"
           onClick={onCancel}
-          className="rounded-lg px-3 py-2 text-sm text-zinc-500 hover:bg-zinc-100 transition-colors"
+          className="rounded-lg px-3 py-2 text-sm text-zinc-400 hover:bg-zinc-800 hover:text-white transition-colors"
         >
           {t('common.cancel')}
         </button>
@@ -100,7 +100,7 @@ export function GramInput({ productName, pricePerGram, maxGrams, onConfirm, onCa
           size="sm"
           onClick={() => onConfirm(grams)}
           disabled={!canConfirm}
-          className="bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg px-4"
+          className="bg-emerald-500 hover:bg-emerald-400 text-white rounded-lg px-5"
         >
           {t('common.confirm')}
         </Button>
@@ -108,7 +108,7 @@ export function GramInput({ productName, pricePerGram, maxGrams, onConfirm, onCa
 
       {/* Limit warning */}
       {exceedsLimit && maxGrams !== null && (
-        <p className="text-xs text-red-600 bg-red-50 rounded-lg px-3 py-1.5">
+        <p className="text-xs text-red-400 bg-red-500/10 border border-red-500/20 rounded-lg px-3 py-1.5">
           {t('pos.error.limit_daily', { remaining: maxGrams.toString() })}
         </p>
       )}

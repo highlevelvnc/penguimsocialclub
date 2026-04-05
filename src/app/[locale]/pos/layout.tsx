@@ -29,7 +29,7 @@ export default async function PosLayout({
   }
 
   return (
-    <div className="flex h-screen flex-col bg-zinc-50">
+    <div className="flex h-screen flex-col bg-zinc-950">
       <PosHeader
         staffName={session.staffName}
         locale={locale}
