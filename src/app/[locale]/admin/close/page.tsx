@@ -25,6 +25,11 @@ export default async function ClosePage({
 
   return (
     <div className="space-y-6 max-w-3xl">
+      <div>
+        <h1 className="text-xl font-bold text-zinc-900">{tr['nav.daily_close']}</h1>
+        <p className="text-sm text-zinc-400 mt-0.5">Cierre de caja y revisión del día</p>
+      </div>
+
       <DailyCloseSummary
         date={today}
         summary={summary}

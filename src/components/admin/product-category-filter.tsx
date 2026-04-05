@@ -4,7 +4,16 @@ import { useRouter } from 'next/navigation'
 import { useT } from '@/lib/i18n/client'
 import { PRODUCT_CATEGORIES } from '@/lib/constants'
 import type { ProductCategory } from '@/lib/supabase/types'
-import { Button } from '@/components/ui/button'
+
+const categoryIcons: Record<ProductCategory, string> = {
+  flower: '🌿',
+  hash: '🟤',
+  extraction: '💧',
+  vape: '💨',
+  edible: '🍬',
+  beverage: '🍵',
+  accessory: '🛠️',
+}
 
 interface Props {
   currentCategory: ProductCategory | null
@@ -24,22 +33,31 @@ export function ProductCategoryFilter({ currentCategory, locale }: Props) {
 
   return (
     <div className="flex flex-wrap gap-1.5">
-      <Button
-        variant={currentCategory === null ? 'default' : 'outline'}
-        size="sm"
+      <button
+        type="button"
         onClick={() => handleFilter(null)}
+        className={`rounded-full border px-3 py-1 text-xs font-medium transition-all ${
+          currentCategory === null
+            ? 'bg-zinc-900 text-white border-zinc-900'
+            : 'border-zinc-200 text-zinc-500 hover:border-zinc-300 hover:text-zinc-700'
+        }`}
       >
-        All
-      </Button>
+        {t('common.all') || 'Todos'}
+      </button>
       {PRODUCT_CATEGORIES.map((cat) => (
-        <Button
+        <button
           key={cat}
-          variant={currentCategory === cat ? 'default' : 'outline'}
-          size="sm"
+          type="button"
           onClick={() => handleFilter(cat)}
+          className={`flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-medium transition-all ${
+            currentCategory === cat
+              ? 'bg-zinc-900 text-white border-zinc-900'
+              : 'border-zinc-200 text-zinc-500 hover:border-zinc-300 hover:text-zinc-700'
+          }`}
         >
+          <span>{categoryIcons[cat]}</span>
           {t(`product.category.${cat}`)}
-        </Button>
+        </button>
       ))}
     </div>
   )

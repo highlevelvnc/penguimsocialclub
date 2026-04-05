@@ -4,11 +4,9 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useT, useLocale } from '@/lib/i18n/client'
 import { createMember, updateMember, type MemberFormData } from '@/actions/members'
-import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import {
   Select,
   SelectContent,
@@ -111,7 +109,7 @@ export function MemberForm({ mode, memberId, initialData, defaultLimits }: Membe
     setLoading(false)
 
     if (result.success) {
-      toast.success(mode === 'create' ? 'Member created' : 'Member updated')
+      toast.success(mode === 'create' ? 'Socio creado' : 'Socio actualizado')
       if (mode === 'create' && 'id' in result) {
         router.push(`/${locale}/admin/members/${result.id}`)
       }
@@ -122,35 +120,33 @@ export function MemberForm({ mode, memberId, initialData, defaultLimits }: Membe
   }
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>
-          {mode === 'create' ? t('member.create') : t('common.edit')}
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-4">
+    <form onSubmit={handleSubmit} className="space-y-5">
+
+      {/* Section: Personal data */}
+      <FormSection title={t('member.full_name') + ' & ID'} icon="👤">
+        <div className="space-y-4">
           {/* Name */}
           <div className="space-y-1.5">
-            <Label htmlFor="full_name">{t('member.full_name')}</Label>
+            <Label htmlFor="full_name" className="text-xs text-zinc-500">{t('member.full_name')}</Label>
             <Input
               id="full_name"
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
               required
               autoFocus={mode === 'create'}
+              className="h-10"
             />
           </div>
 
           {/* Document type + number */}
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-3 gap-3">
             <div className="space-y-1.5">
-              <Label>{t('member.document_type')}</Label>
+              <Label className="text-xs text-zinc-500">{t('member.document_type')}</Label>
               <Select
                 value={documentType}
                 onValueChange={(val) => val && setDocumentType(val as 'dni' | 'nie' | 'passport')}
               >
-                <SelectTrigger className="w-full">
+                <SelectTrigger className="h-10 w-full">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -163,19 +159,20 @@ export function MemberForm({ mode, memberId, initialData, defaultLimits }: Membe
               </Select>
             </div>
             <div className="col-span-2 space-y-1.5">
-              <Label htmlFor="doc_number">{t('member.document_number')}</Label>
+              <Label htmlFor="doc_number" className="text-xs text-zinc-500">{t('member.document_number')}</Label>
               <Input
                 id="doc_number"
                 value={documentNumber}
                 onChange={(e) => setDocumentNumber(e.target.value)}
                 required
+                className="h-10 uppercase"
               />
             </div>
           </div>
 
           {/* Date of birth */}
           <div className="space-y-1.5">
-            <Label htmlFor="dob">{t('member.date_of_birth')}</Label>
+            <Label htmlFor="dob" className="text-xs text-zinc-500">{t('member.date_of_birth')}</Label>
             <Input
               id="dob"
               type="date"
@@ -183,35 +180,30 @@ export function MemberForm({ mode, memberId, initialData, defaultLimits }: Membe
               onChange={(e) => setDateOfBirth(e.target.value)}
               required
               max={todayISO()}
+              className="h-10"
             />
           </div>
 
           {/* Phone + Email */}
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-3">
             <div className="space-y-1.5">
-              <Label htmlFor="phone">{t('member.phone')}</Label>
-              <Input
-                id="phone"
-                type="tel"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-              />
+              <Label htmlFor="phone" className="text-xs text-zinc-500">{t('member.phone')}</Label>
+              <Input id="phone" type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} className="h-10" />
             </div>
             <div className="space-y-1.5">
-              <Label htmlFor="email">{t('member.email')}</Label>
-              <Input
-                id="email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
+              <Label htmlFor="email" className="text-xs text-zinc-500">{t('member.email')}</Label>
+              <Input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="h-10" />
             </div>
           </div>
+        </div>
+      </FormSection>
 
-          {/* Membership dates */}
-          <div className="grid grid-cols-2 gap-4">
+      {/* Section: Membership */}
+      <FormSection title="Membresía" icon="📅">
+        <div className="space-y-4">
+          <div className="grid grid-cols-2 gap-3">
             <div className="space-y-1.5">
-              <Label htmlFor="mem_start">{t('member.membership_start')}</Label>
+              <Label htmlFor="mem_start" className="text-xs text-zinc-500">{t('member.membership_start')}</Label>
               <Input
                 id="mem_start"
                 type="date"
@@ -219,56 +211,30 @@ export function MemberForm({ mode, memberId, initialData, defaultLimits }: Membe
                 onChange={(e) => setMembershipStart(e.target.value)}
                 required
                 disabled={mode === 'edit'}
+                className="h-10"
               />
             </div>
             <div className="space-y-1.5">
-              <Label htmlFor="mem_end">{t('member.membership_end')}</Label>
+              <Label htmlFor="mem_end" className="text-xs text-zinc-500">{t('member.membership_end')}</Label>
               <Input
                 id="mem_end"
                 type="date"
                 value={membershipEnd}
                 onChange={(e) => setMembershipEnd(e.target.value)}
                 required
-              />
-            </div>
-          </div>
-
-          {/* Dispensing limits */}
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-1.5">
-              <Label htmlFor="daily_limit">{t('member.daily_limit')}</Label>
-              <Input
-                id="daily_limit"
-                type="number"
-                step="0.5"
-                min="0.5"
-                value={dailyLimit}
-                onChange={(e) => setDailyLimit(e.target.value)}
-                required
-              />
-            </div>
-            <div className="space-y-1.5">
-              <Label htmlFor="monthly_limit">{t('member.monthly_limit')}</Label>
-              <Input
-                id="monthly_limit"
-                type="number"
-                step="1"
-                min="1"
-                value={monthlyLimit}
-                onChange={(e) => setMonthlyLimit(e.target.value)}
-                required
+                className="h-10"
               />
             </div>
           </div>
 
           {/* Status */}
           <div className="space-y-1.5">
-            <Label>{t('common.status')}</Label>
+            <Label className="text-xs text-zinc-500">{t('common.status')}</Label>
             <Select
               value={status}
               onValueChange={(val) => val && setStatus(val as 'active' | 'expired' | 'suspended')}
             >
-              <SelectTrigger className="w-full">
+              <SelectTrigger className="h-10 w-full">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -280,33 +246,104 @@ export function MemberForm({ mode, memberId, initialData, defaultLimits }: Membe
               </SelectContent>
             </Select>
           </div>
+        </div>
+      </FormSection>
 
-          {/* Notes */}
+      {/* Section: Dispensing limits */}
+      <FormSection title="Límites de dispensación" icon="🌿">
+        <div className="grid grid-cols-2 gap-3">
           <div className="space-y-1.5">
-            <Label htmlFor="notes">{t('member.notes')}</Label>
-            <Textarea
-              id="notes"
-              value={notes}
-              onChange={(e) => setNotes(e.target.value)}
-              rows={2}
-            />
+            <Label htmlFor="daily_limit" className="text-xs text-zinc-500">{t('member.daily_limit')}</Label>
+            <div className="relative">
+              <Input
+                id="daily_limit"
+                type="number"
+                step="0.5"
+                min="0.5"
+                value={dailyLimit}
+                onChange={(e) => setDailyLimit(e.target.value)}
+                required
+                className="h-10 pr-8"
+              />
+              <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-zinc-400">g</span>
+            </div>
           </div>
+          <div className="space-y-1.5">
+            <Label htmlFor="monthly_limit" className="text-xs text-zinc-500">{t('member.monthly_limit')}</Label>
+            <div className="relative">
+              <Input
+                id="monthly_limit"
+                type="number"
+                step="1"
+                min="1"
+                value={monthlyLimit}
+                onChange={(e) => setMonthlyLimit(e.target.value)}
+                required
+                className="h-10 pr-8"
+              />
+              <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-zinc-400">g</span>
+            </div>
+          </div>
+        </div>
+      </FormSection>
 
-          {/* Actions */}
-          <div className="flex gap-3 pt-2">
-            <Button type="submit" disabled={loading}>
-              {loading ? t('common.loading') : t('common.save')}
-            </Button>
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => router.back()}
-            >
-              {t('common.cancel')}
-            </Button>
-          </div>
-        </form>
-      </CardContent>
-    </Card>
+      {/* Notes */}
+      <div className="space-y-1.5">
+        <Label htmlFor="notes" className="text-xs text-zinc-500">{t('member.notes')}</Label>
+        <Textarea
+          id="notes"
+          value={notes}
+          onChange={(e) => setNotes(e.target.value)}
+          rows={2}
+          className="resize-none text-sm"
+          placeholder="Notas internas opcionales"
+        />
+      </div>
+
+      {/* Actions */}
+      <div className="flex gap-3 pt-1">
+        <button
+          type="submit"
+          disabled={loading}
+          className="flex-1 h-11 rounded-xl bg-zinc-900 text-sm font-bold text-white hover:bg-zinc-800 transition-all active:scale-[0.98] disabled:opacity-50 shadow-sm"
+        >
+          {loading ? (
+            <span className="inline-flex items-center gap-2 justify-center">
+              <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
+              {t('common.loading')}
+            </span>
+          ) : (
+            t('common.save')
+          )}
+        </button>
+        <button
+          type="button"
+          className="h-11 rounded-xl border border-zinc-200 px-6 text-sm font-medium text-zinc-600 hover:bg-zinc-50 transition-all"
+          onClick={() => router.back()}
+        >
+          {t('common.cancel')}
+        </button>
+      </div>
+    </form>
+  )
+}
+
+function FormSection({
+  title,
+  icon,
+  children,
+}: {
+  title: string
+  icon: string
+  children: React.ReactNode
+}) {
+  return (
+    <div className="rounded-xl border border-zinc-200 bg-white overflow-hidden">
+      <div className="flex items-center gap-2 border-b border-zinc-100 bg-zinc-50/50 px-4 py-2.5">
+        <span className="text-sm">{icon}</span>
+        <span className="text-xs font-semibold text-zinc-600 uppercase tracking-wide">{title}</span>
+      </div>
+      <div className="p-4">{children}</div>
+    </div>
   )
 }

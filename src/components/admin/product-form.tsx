@@ -11,11 +11,9 @@ import {
   CATEGORY_NEEDS_GRAM_EQUIVALENT,
 } from '@/lib/constants'
 import type { ProductCategory } from '@/lib/supabase/types'
-import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import {
   Select,
   SelectContent,
@@ -24,6 +22,16 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { toast } from 'sonner'
+
+const categoryIcons: Record<ProductCategory, string> = {
+  flower: '🌿',
+  hash: '🟤',
+  extraction: '💧',
+  vape: '💨',
+  edible: '🍬',
+  beverage: '🍵',
+  accessory: '🛠️',
+}
 
 interface SubcategoryOption {
   id: string
@@ -66,15 +74,12 @@ export function ProductForm({ mode, productId, initialData, subcategories }: Pro
   const [sortOrder, setSortOrder] = useState(initialData?.sort_order?.toString() ?? '0')
   const [active, setActive] = useState(initialData?.active ?? true)
 
-  // Derived from category
   const unitType = CATEGORY_UNIT_TYPE[category]
   const countsTowardLimit = CATEGORY_COUNTS_TOWARD_LIMIT[category]
   const needsGramEquivalent = CATEGORY_NEEDS_GRAM_EQUIVALENT[category]
 
-  // Filter subcategories for selected category
   const filteredSubcategories = subcategories.filter((s) => s.category === category)
 
-  // Reset subcategory when category changes
   useEffect(() => {
     if (!filteredSubcategories.find((s) => s.id === subcategoryId)) {
       setSubcategoryId('')
@@ -105,7 +110,7 @@ export function ProductForm({ mode, productId, initialData, subcategories }: Pro
     setLoading(false)
 
     if (result.success) {
-      toast.success(mode === 'create' ? 'Product created' : 'Product updated')
+      toast.success(mode === 'create' ? 'Producto creado' : 'Producto actualizado')
       if (mode === 'create' && 'id' in result) {
         router.push(`/${locale}/admin/products/${result.id}`)
       }
@@ -118,41 +123,39 @@ export function ProductForm({ mode, productId, initialData, subcategories }: Pro
   const priceLabel = unitType === 'gram' ? t('product.price_per_gram') : t('product.price_per_unit')
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>
-          {mode === 'create' ? t('product.create') : t('common.edit')}
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-4">
+    <form onSubmit={handleSubmit} className="space-y-5">
+
+      {/* Section: Category */}
+      <FormSection title="Categoría" icon={categoryIcons[category]}>
+        <div className="space-y-4">
           {/* Name */}
           <div className="space-y-1.5">
-            <Label htmlFor="name">{t('product.name')}</Label>
+            <Label htmlFor="name" className="text-xs text-zinc-500">{t('product.name')}</Label>
             <Input
               id="name"
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
               autoFocus={mode === 'create'}
+              className="h-10"
             />
           </div>
 
-          {/* Category + Subcategory row */}
-          <div className="grid grid-cols-2 gap-4">
+          {/* Category + Subcategory */}
+          <div className="grid grid-cols-2 gap-3">
             <div className="space-y-1.5">
-              <Label>{t('product.category_label')}</Label>
+              <Label className="text-xs text-zinc-500">{t('product.category_label')}</Label>
               <Select
                 value={category}
                 onValueChange={(val) => val && setCategory(val as ProductCategory)}
               >
-                <SelectTrigger className="w-full">
+                <SelectTrigger className="h-10 w-full">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
                   {PRODUCT_CATEGORIES.map((cat) => (
                     <SelectItem key={cat} value={cat}>
-                      {t(`product.category.${cat}`)}
+                      {categoryIcons[cat]} {t(`product.category.${cat}`)}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -160,12 +163,12 @@ export function ProductForm({ mode, productId, initialData, subcategories }: Pro
             </div>
 
             <div className="space-y-1.5">
-              <Label>{t('product.subcategory')}</Label>
+              <Label className="text-xs text-zinc-500">{t('product.subcategory')}</Label>
               <Select
                 value={subcategoryId}
                 onValueChange={(val) => setSubcategoryId(val ?? '')}
               >
-                <SelectTrigger className="w-full">
+                <SelectTrigger className="h-10 w-full">
                   <SelectValue placeholder="—" />
                 </SelectTrigger>
                 <SelectContent>
@@ -180,20 +183,27 @@ export function ProductForm({ mode, productId, initialData, subcategories }: Pro
             </div>
           </div>
 
-          {/* Auto-derived info */}
-          <div className="flex gap-4 text-sm text-muted-foreground">
-            <span>
-              {unitType === 'gram' ? 'Sold by gram' : 'Sold by unit'}
+          {/* Auto-derived info badges */}
+          <div className="flex gap-2">
+            <span className="inline-flex items-center rounded-full bg-zinc-100 px-2.5 py-1 text-[11px] font-medium text-zinc-600">
+              {unitType === 'gram' ? '⚖️ Por gramo' : '📦 Por unidad'}
             </span>
-            <span>
-              {countsTowardLimit ? 'Counts toward limit' : 'No limit'}
+            <span className={`inline-flex items-center rounded-full px-2.5 py-1 text-[11px] font-medium ${
+              countsTowardLimit ? 'bg-emerald-50 text-emerald-700' : 'bg-zinc-100 text-zinc-500'
+            }`}>
+              {countsTowardLimit ? '🌿 Cuenta para límite' : 'Sin límite'}
             </span>
           </div>
+        </div>
+      </FormSection>
 
-          {/* Price + Stock row */}
-          <div className="grid grid-cols-3 gap-4">
-            <div className="space-y-1.5">
-              <Label htmlFor="price">{priceLabel}</Label>
+      {/* Section: Pricing & Stock */}
+      <FormSection title="Precio & Stock" icon="💰">
+        <div className="grid grid-cols-3 gap-3">
+          <div className="space-y-1.5">
+            <Label htmlFor="price" className="text-xs text-zinc-500">{priceLabel}</Label>
+            <div className="relative">
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-zinc-400">{'\u20AC'}</span>
               <Input
                 id="price"
                 type="number"
@@ -202,12 +212,15 @@ export function ProductForm({ mode, productId, initialData, subcategories }: Pro
                 value={pricePerUnit}
                 onChange={(e) => setPricePerUnit(e.target.value)}
                 required
+                className="h-10 pl-7 tabular-nums"
               />
             </div>
+          </div>
 
-            {mode === 'create' && (
-              <div className="space-y-1.5">
-                <Label htmlFor="stock">{t('product.stock')}</Label>
+          {mode === 'create' && (
+            <div className="space-y-1.5">
+              <Label htmlFor="stock" className="text-xs text-zinc-500">{t('product.stock')}</Label>
+              <div className="relative">
                 <Input
                   id="stock"
                   type="number"
@@ -215,12 +228,18 @@ export function ProductForm({ mode, productId, initialData, subcategories }: Pro
                   min="0"
                   value={stockQuantity}
                   onChange={(e) => setStockQuantity(e.target.value)}
+                  className="h-10 pr-8 tabular-nums"
                 />
+                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-zinc-400">
+                  {unitType === 'gram' ? 'g' : 'ud'}
+                </span>
               </div>
-            )}
+            </div>
+          )}
 
-            <div className="space-y-1.5">
-              <Label htmlFor="threshold">{t('product.low_stock_threshold')}</Label>
+          <div className="space-y-1.5">
+            <Label htmlFor="threshold" className="text-xs text-zinc-500">{t('product.low_stock_threshold')}</Label>
+            <div className="relative">
               <Input
                 id="threshold"
                 type="number"
@@ -228,81 +247,136 @@ export function ProductForm({ mode, productId, initialData, subcategories }: Pro
                 min="0"
                 value={lowStockThreshold}
                 onChange={(e) => setLowStockThreshold(e.target.value)}
+                className="h-10 pr-8 tabular-nums"
               />
+              <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-zinc-400">
+                {unitType === 'gram' ? 'g' : 'ud'}
+              </span>
             </div>
           </div>
+        </div>
 
-          {/* Gram equivalent — only for unit-based cannabis */}
-          {needsGramEquivalent && (
-            <div className="space-y-1.5">
-              <Label htmlFor="gram_eq">{t('product.gram_equivalent')}</Label>
-              <Input
-                id="gram_eq"
-                type="number"
-                step="0.01"
-                min="0.01"
-                value={gramEquivalent}
-                onChange={(e) => setGramEquivalent(e.target.value)}
-                required
-                placeholder="e.g. 0.5"
-              />
-              <p className="text-xs text-muted-foreground">
-                Grams of cannabis this unit counts toward the dispensing limit
-              </p>
+        {needsGramEquivalent && (
+          <div className="mt-3 space-y-1.5">
+            <Label htmlFor="gram_eq" className="text-xs text-zinc-500">{t('product.gram_equivalent')}</Label>
+            <div className="flex items-center gap-3">
+              <div className="relative w-36">
+                <Input
+                  id="gram_eq"
+                  type="number"
+                  step="0.01"
+                  min="0.01"
+                  value={gramEquivalent}
+                  onChange={(e) => setGramEquivalent(e.target.value)}
+                  required
+                  placeholder="0.5"
+                  className="h-10 pr-8 tabular-nums"
+                />
+                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-zinc-400">g</span>
+              </div>
+              <p className="text-xs text-zinc-400">gramos equivalentes por unidad para el límite de dispensación</p>
             </div>
-          )}
+          </div>
+        )}
+      </FormSection>
 
+      {/* Section: Details */}
+      <FormSection title="Detalles" icon="📝">
+        <div className="space-y-4">
           {/* Description */}
           <div className="space-y-1.5">
-            <Label htmlFor="description">{t('product.description')}</Label>
+            <Label htmlFor="description" className="text-xs text-zinc-500">{t('product.description')}</Label>
             <Textarea
               id="description"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               rows={2}
+              className="resize-none text-sm"
             />
           </div>
 
-          {/* Sort order + Active row */}
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-1.5">
-              <Label htmlFor="sort_order">Sort order</Label>
+          {/* Sort order + Active */}
+          <div className="flex items-center gap-4">
+            <div className="space-y-1.5 w-32">
+              <Label htmlFor="sort_order" className="text-xs text-zinc-500">Orden</Label>
               <Input
                 id="sort_order"
                 type="number"
                 min="0"
                 value={sortOrder}
                 onChange={(e) => setSortOrder(e.target.value)}
+                className="h-10"
               />
             </div>
 
-            <div className="flex items-end gap-2 pb-1">
-              <input
-                type="checkbox"
-                id="active"
-                checked={active}
-                onChange={(e) => setActive(e.target.checked)}
-                className="h-4 w-4"
-              />
-              <Label htmlFor="active">{t('common.active')}</Label>
+            <div className="flex items-center gap-2 pt-5">
+              <button
+                type="button"
+                role="switch"
+                aria-checked={active}
+                onClick={() => setActive(!active)}
+                className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors ${
+                  active ? 'bg-emerald-500' : 'bg-zinc-200'
+                }`}
+              >
+                <span
+                  className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow transition-transform ${
+                    active ? 'translate-x-5' : 'translate-x-0'
+                  }`}
+                />
+              </button>
+              <Label className="text-sm text-zinc-700 cursor-pointer" onClick={() => setActive(!active)}>
+                {t('common.active')}
+              </Label>
             </div>
           </div>
+        </div>
+      </FormSection>
 
-          {/* Actions */}
-          <div className="flex gap-3 pt-2">
-            <Button type="submit" disabled={loading}>
-              {loading ? t('common.loading') : t('common.save')}
-            </Button>
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => router.back()}
-            >
-              {t('common.cancel')}
-            </Button>
-          </div>
-        </form>
-      </CardContent>
-    </Card>
+      {/* Actions */}
+      <div className="flex gap-3 pt-1">
+        <button
+          type="submit"
+          disabled={loading}
+          className="flex-1 h-11 rounded-xl bg-zinc-900 text-sm font-bold text-white hover:bg-zinc-800 transition-all active:scale-[0.98] disabled:opacity-50 shadow-sm"
+        >
+          {loading ? (
+            <span className="inline-flex items-center gap-2 justify-center">
+              <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
+              {t('common.loading')}
+            </span>
+          ) : (
+            t('common.save')
+          )}
+        </button>
+        <button
+          type="button"
+          className="h-11 rounded-xl border border-zinc-200 px-6 text-sm font-medium text-zinc-600 hover:bg-zinc-50 transition-all"
+          onClick={() => router.back()}
+        >
+          {t('common.cancel')}
+        </button>
+      </div>
+    </form>
+  )
+}
+
+function FormSection({
+  title,
+  icon,
+  children,
+}: {
+  title: string
+  icon: string
+  children: React.ReactNode
+}) {
+  return (
+    <div className="rounded-xl border border-zinc-200 bg-white overflow-hidden">
+      <div className="flex items-center gap-2 border-b border-zinc-100 bg-zinc-50/50 px-4 py-2.5">
+        <span className="text-sm">{icon}</span>
+        <span className="text-xs font-semibold text-zinc-600 uppercase tracking-wide">{title}</span>
+      </div>
+      <div className="p-4">{children}</div>
+    </div>
   )
 }
