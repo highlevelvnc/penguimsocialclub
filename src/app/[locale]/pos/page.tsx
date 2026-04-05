@@ -268,11 +268,17 @@ export default function PosPage() {
 
   if (phase === 'search' || !member || !limits) {
     return (
-      <div className="flex h-full items-center justify-center px-4">
-        <div className="w-full max-w-md space-y-4">
-          <h2 className="text-center text-lg text-muted-foreground">
-            {t('pos.select_member')}
-          </h2>
+      <div className="flex h-full flex-col items-center justify-center bg-gradient-to-br from-zinc-50 to-white px-4">
+        <div className="w-full max-w-md space-y-6 text-center">
+          <div className="space-y-2">
+            <span className="text-4xl">🐧</span>
+            <h2 className="text-lg font-semibold text-zinc-900">
+              {t('pos.select_member')}
+            </h2>
+            <p className="text-sm text-zinc-400">
+              {t('pos.search_member')}
+            </p>
+          </div>
           <PosMemberSearch onSelect={handleMemberSelect} />
         </div>
       </div>
@@ -281,11 +287,11 @@ export default function PosPage() {
 
   // phase === 'dispensing'
   return (
-    <div className="flex h-full">
+    <div className="flex h-full bg-zinc-50">
       {/* Left: member card + product grid */}
       <div className="flex flex-1 flex-col overflow-hidden">
         {/* Member card */}
-        <div className="p-3 pb-0">
+        <div className="px-3 pt-3">
           <PosMemberCard
             member={member}
             limits={limits}
@@ -297,7 +303,7 @@ export default function PosPage() {
         </div>
 
         {/* Product grid */}
-        <div className="flex-1 overflow-hidden mt-3">
+        <div className="flex-1 overflow-hidden mt-3 mx-3 mb-3">
           <PosProductGrid
             products={products}
             subcategories={subcategories}
