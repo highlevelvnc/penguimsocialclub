@@ -46,9 +46,16 @@ export function PosMemberCard({
           <div className="flex h-8 w-8 items-center justify-center rounded-full bg-emerald-500/15 text-emerald-400 font-bold text-xs">
             {initials}
           </div>
-          <div>
-            <div className="text-sm font-semibold text-zinc-100">{member.full_name}</div>
-            <div className="text-[11px] text-zinc-500">
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-semibold text-zinc-100">{member.full_name}</span>
+              {member.loyalty_points > 0 && (
+                <span className="flex-shrink-0 rounded-full bg-amber-500/15 px-2 py-0.5 text-[10px] font-bold text-amber-400 tabular-nums">
+                  ⭐ {member.loyalty_points} pts
+                </span>
+              )}
+            </div>
+            <div className="text-[11px] text-zinc-500 truncate">
               {member.document_number}
               {lastVisit && (
                 <span className="ml-2 text-zinc-600">| {lastVisit}</span>

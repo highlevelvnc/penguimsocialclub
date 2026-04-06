@@ -10,6 +10,8 @@ import type { Locale } from '@/lib/i18n/config'
 import { MemberForm } from '@/components/admin/member-form'
 import { MemberRenew } from '@/components/admin/member-renew'
 import { MemberHistory } from '@/components/admin/member-history'
+import { LoyaltyPanel } from '@/components/admin/loyalty-panel'
+import { getLoyaltyHistory, getLoyaltyConfig } from '@/actions/loyalty'
 
 const statusStyles: Record<string, string> = {
   active: 'bg-emerald-50 text-emerald-700',
@@ -24,10 +26,12 @@ export default async function MemberDetailPage({
 }) {
   const { locale, id } = await params
 
-  const [member, transactions, dispensing] = await Promise.all([
+  const [member, transactions, dispensing, loyaltyHistory, loyaltyConfig] = await Promise.all([
     getMember(id),
     getMemberTransactions(id),
     getMemberDispensingTotals(id),
+    getLoyaltyHistory(id),
+    getLoyaltyConfig(),
   ])
 
   if (!member) {
@@ -141,6 +145,14 @@ export default async function MemberDetailPage({
           </div>
         </div>
       </div>
+
+      {/* Loyalty */}
+      <LoyaltyPanel
+        memberId={member.id}
+        currentPoints={member.loyalty_points}
+        euroPerPoint={loyaltyConfig.euroPerPoint}
+        history={loyaltyHistory}
+      />
 
       {/* Renewal */}
       <MemberRenew

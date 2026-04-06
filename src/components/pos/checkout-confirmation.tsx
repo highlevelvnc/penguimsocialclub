@@ -10,6 +10,7 @@ interface Props {
   cannabisGrams: number
   paymentMethod: 'cash' | 'card'
   memberName: string
+  pointsEarned: number
   onNext: () => void
 }
 
@@ -19,6 +20,7 @@ export function CheckoutConfirmation({
   cannabisGrams,
   paymentMethod,
   memberName,
+  pointsEarned,
   onNext,
 }: Props) {
   const t = useT()
@@ -62,6 +64,14 @@ export function CheckoutConfirmation({
               </div>
             )}
           </div>
+
+          {/* Points earned */}
+          {pointsEarned > 0 && (
+            <div className="rounded-lg bg-emerald-500/10 border border-emerald-500/20 px-4 py-2.5 flex items-center justify-between">
+              <span className="text-sm text-emerald-400">⭐ {t('loyalty.points')}</span>
+              <span className="text-sm font-bold text-emerald-300">+{pointsEarned} pts</span>
+            </div>
+          )}
 
           {/* Buttons */}
           <div className="space-y-2.5">

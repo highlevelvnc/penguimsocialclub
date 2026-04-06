@@ -10,6 +10,7 @@ import { addToCart, removeFromCart, clearCart, EMPTY_CART, type CartState } from
 import { getRemainingLimits, checkLimit, type MemberLimits } from '@/lib/pos/limits'
 import { checkout } from '@/actions/pos'
 import { checkInMember } from '@/actions/checkin'
+import { earnPoints } from '@/actions/loyalty'
 import { PosMemberSearch } from '@/components/pos/member-search'
 import { PosMemberCard } from '@/components/pos/member-card'
 import { PosProductGrid } from '@/components/pos/product-grid'
@@ -45,6 +46,7 @@ export default function PosPage() {
     cannabisGrams: number
     paymentMethod: 'cash' | 'card'
     memberName: string
+    pointsEarned: number
   } | null>(null)
 
   // -- Load products once --
@@ -220,6 +222,13 @@ export default function PosPage() {
       return
     }
 
+    // Earn loyalty points
+    let pointsEarned = 0
+    const loyaltyResult = await earnPoints(member.id, result.transactionId, cart.totalAmount)
+    if (loyaltyResult.success) {
+      pointsEarned = loyaltyResult.pointsEarned
+    }
+
     // Success — show confirmation
     setConfirmationData({
       transactionId: result.transactionId,
@@ -227,6 +236,7 @@ export default function PosPage() {
       cannabisGrams: cart.cannabisGramsTotal,
       paymentMethod: method,
       memberName: member.full_name,
+      pointsEarned,
     })
     setCart(clearCart())
     setPhase('confirmation')
@@ -273,6 +283,7 @@ export default function PosPage() {
         cannabisGrams={confirmationData.cannabisGrams}
         paymentMethod={confirmationData.paymentMethod}
         memberName={confirmationData.memberName}
+        pointsEarned={confirmationData.pointsEarned}
         onNext={handleNext}
       />
     )

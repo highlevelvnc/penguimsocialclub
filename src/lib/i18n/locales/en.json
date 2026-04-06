@@ -210,6 +210,18 @@
   "staff.role.attendant": "Attendant",
   "staff.deactivate": "Deactivate",
 
+  "loyalty.points": "Points",
+  "loyalty.balance": "Points balance",
+  "loyalty.earn": "Earned",
+  "loyalty.redeem": "Redeem",
+  "loyalty.adjust": "Adjustment",
+  "loyalty.points_earned": "+{points} points earned",
+  "loyalty.points_value": "Value: {value}",
+  "loyalty.redeem_discount": "Redeem for discount",
+  "loyalty.insufficient_points": "Insufficient points",
+  "loyalty.history": "Points history",
+  "loyalty.no_points": "No points yet",
+
   "checkin.title": "Access control",
   "checkin.checked_in": "In the club",
   "checkin.check_out": "Check out",

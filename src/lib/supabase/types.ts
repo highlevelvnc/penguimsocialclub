@@ -107,6 +107,7 @@ export type Database = {
           daily_limit_grams: number
           monthly_limit_grams: number
           notes: string | null
+          loyalty_points: number
           created_at: string
           updated_at: string
         }
@@ -126,6 +127,7 @@ export type Database = {
           daily_limit_grams: number
           monthly_limit_grams: number
           notes?: string | null
+          loyalty_points?: number
           created_at?: string
           updated_at?: string
         }
@@ -381,6 +383,35 @@ export type Database = {
           notes?: string | null
         }
       }
+      loyalty_ledger: {
+        Row: {
+          id: string
+          shop_id: string
+          member_id: string
+          transaction_id: string | null
+          type: 'earn' | 'redeem' | 'adjust'
+          points: number
+          balance_after: number
+          description: string | null
+          created_by: string
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          shop_id: string
+          member_id: string
+          transaction_id?: string | null
+          type: 'earn' | 'redeem' | 'adjust'
+          points: number
+          balance_after: number
+          description?: string | null
+          created_by: string
+          created_at?: string
+        }
+        Update: {
+          description?: string | null
+        }
+      }
       check_ins: {
         Row: {
           id: string
@@ -462,3 +493,4 @@ export type StockAdjustment = Database['public']['Tables']['stock_adjustments'][
 export type DailyClose = Database['public']['Tables']['daily_closes']['Row']
 export type Subcategory = Database['public']['Tables']['subcategories']['Row']
 export type CheckIn = Database['public']['Tables']['check_ins']['Row']
+export type LoyaltyLedger = Database['public']['Tables']['loyalty_ledger']['Row']

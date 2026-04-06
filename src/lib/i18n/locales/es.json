@@ -210,6 +210,18 @@
   "staff.role.attendant": "Dependiente",
   "staff.deactivate": "Desactivar",
 
+  "loyalty.points": "Puntos",
+  "loyalty.balance": "Saldo de puntos",
+  "loyalty.earn": "Ganado",
+  "loyalty.redeem": "Canjear",
+  "loyalty.adjust": "Ajuste",
+  "loyalty.points_earned": "+{points} puntos ganados",
+  "loyalty.points_value": "Valor: {value}",
+  "loyalty.redeem_discount": "Canjear por descuento",
+  "loyalty.insufficient_points": "Puntos insuficientes",
+  "loyalty.history": "Historial de puntos",
+  "loyalty.no_points": "Sin puntos aún",
+
   "checkin.title": "Control de acceso",
   "checkin.checked_in": "Dentro del club",
   "checkin.check_out": "Registrar salida",
