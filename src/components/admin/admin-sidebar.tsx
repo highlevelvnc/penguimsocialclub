@@ -68,9 +68,11 @@ const navItems = [
 export function AdminSidebar({
   locale,
   staffName,
+  lowStockCount = 0,
 }: {
   locale: string
   staffName: string
+  lowStockCount?: number
 }) {
   const t = useT()
   const pathname = usePathname()
@@ -123,7 +125,13 @@ export function AdminSidebar({
                 {item.icon}
               </span>
               {t(item.key)}
-              {isActive && (
+              {/* Low stock badge on Products nav */}
+              {item.href === '/admin/products' && lowStockCount > 0 && (
+                <span className="ml-auto flex h-5 min-w-5 items-center justify-center rounded-full bg-amber-500 text-[10px] font-bold text-white px-1">
+                  {lowStockCount}
+                </span>
+              )}
+              {isActive && !('exact' in item) && !(item.href === '/admin/products' && lowStockCount > 0) && (
                 <span className="ml-auto h-1.5 w-1.5 rounded-full bg-emerald-500" />
               )}
             </Link>

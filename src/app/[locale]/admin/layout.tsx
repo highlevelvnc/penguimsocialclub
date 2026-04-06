@@ -3,6 +3,7 @@ import { createServerSupabaseClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { SHOP_ID } from '@/lib/constants'
 import { AdminSidebar } from '@/components/admin/admin-sidebar'
+import { getLowStockCount } from '@/actions/stock-alerts'
 
 export default async function AdminLayout({
   children,
@@ -36,9 +37,16 @@ export default async function AdminLayout({
     redirect(`/${locale}/login`)
   }
 
+  // Fetch low stock count for sidebar badge
+  const lowStockCount = await getLowStockCount()
+
   return (
     <div className="flex h-screen">
-      <AdminSidebar locale={locale} staffName={(staffUser as { full_name: string }).full_name} />
+      <AdminSidebar
+        locale={locale}
+        staffName={(staffUser as { full_name: string }).full_name}
+        lowStockCount={lowStockCount}
+      />
       <main className="flex-1 overflow-auto bg-zinc-50 p-6">
         {children}
       </main>

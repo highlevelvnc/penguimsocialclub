@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { getTranslations } from '@/lib/i18n/server'
 import type { Locale } from '@/lib/i18n/config'
 import { getDashboardData } from '@/actions/dashboard'
+import { getStockAlerts } from '@/actions/stock-alerts'
 
 export default async function AdminDashboardPage({
   params,
@@ -10,7 +11,10 @@ export default async function AdminDashboardPage({
 }) {
   const { locale } = await params
   const tr = getTranslations(locale as Locale)
-  const data = await getDashboardData()
+  const [data, stockAlerts] = await Promise.all([
+    getDashboardData(),
+    getStockAlerts(),
+  ])
 
   return (
     <div className="space-y-6 max-w-5xl">
@@ -84,34 +88,47 @@ export default async function AdminDashboardPage({
 
       {/* Stock alerts + Top products */}
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-        {/* Stock alerts */}
+        {/* Stock alerts with velocity */}
         <div className="rounded-xl border border-zinc-200 bg-white overflow-hidden">
           <div className="border-b border-zinc-100 px-5 py-3.5 flex items-center justify-between">
             <h3 className="text-sm font-semibold text-zinc-900">{tr['dashboard.low_stock_alerts']}</h3>
-            {data.lowStockProducts.length > 0 && (
+            {stockAlerts.length > 0 && (
               <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-amber-500 text-[10px] font-bold text-white px-1.5">
-                {data.lowStockProducts.length}
+                {stockAlerts.length}
               </span>
             )}
           </div>
-          {data.lowStockProducts.length === 0 ? (
+          {stockAlerts.length === 0 ? (
             <div className="px-5 py-8 text-center">
               <span className="text-xl">✅</span>
               <p className="mt-1 text-sm text-zinc-400">{tr['dashboard.no_alerts']}</p>
             </div>
           ) : (
             <div className="divide-y divide-zinc-50">
-              {data.lowStockProducts.slice(0, 6).map((p) => {
+              {stockAlerts.slice(0, 6).map((p) => {
                 const isOut = p.stock_quantity <= 0
                 const suffix = p.unit_type === 'gram' ? 'g' : ''
                 return (
                   <Link
                     key={p.id}
                     href={`/${locale}/admin/products/${p.id}`}
-                    className="flex items-center justify-between px-5 py-2.5 hover:bg-zinc-50/70 transition-colors"
+                    className="flex items-center gap-3 px-5 py-2.5 hover:bg-zinc-50/70 transition-colors"
                   >
-                    <span className="text-sm text-zinc-700">{p.name}</span>
-                    <span className={`text-sm font-bold tabular-nums ${isOut ? 'text-red-500' : 'text-amber-500'}`}>
+                    <span className="flex-1 text-sm text-zinc-700 truncate">{p.name}</span>
+                    {/* Days until stockout */}
+                    {p.daysUntilStockout !== null && (
+                      <span className={`flex-shrink-0 rounded-full px-2 py-0.5 text-[10px] font-semibold ${
+                        p.daysUntilStockout === 0
+                          ? 'bg-red-100 text-red-700'
+                          : p.daysUntilStockout <= 3
+                            ? 'bg-amber-100 text-amber-700'
+                            : 'bg-zinc-100 text-zinc-600'
+                      }`}>
+                        {p.daysUntilStockout === 0 ? tr['product.out_of_stock'] : `~${p.daysUntilStockout}d`}
+                      </span>
+                    )}
+                    {/* Current stock */}
+                    <span className={`flex-shrink-0 text-sm font-bold tabular-nums ${isOut ? 'text-red-500' : 'text-amber-500'}`}>
                       {p.stock_quantity}{suffix}
                     </span>
                   </Link>
