@@ -128,3 +128,39 @@
     @apply font-sans;
   }
 }
+
+/* Print styles for receipt */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+
+  /* Only show the receipt content */
+  [data-receipt],
+  [data-receipt] * {
+    visibility: visible !important;
+  }
+
+  [data-receipt] {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 80mm;
+    padding: 4mm;
+    background: white !important;
+    color: black !important;
+    font-size: 12px;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* Hide navigation and other elements */
+  header, nav, aside, .print\\:hidden {
+    display: none !important;
+  }
+
+  @page {
+    margin: 0;
+    size: 80mm auto;
+  }
+}

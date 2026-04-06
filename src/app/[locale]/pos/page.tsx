@@ -39,6 +39,7 @@ export default function PosPage() {
 
   // Checkout confirmation data
   const [confirmationData, setConfirmationData] = useState<{
+    transactionId: string
     totalAmount: number
     cannabisGrams: number
     paymentMethod: 'cash' | 'card'
@@ -212,6 +213,7 @@ export default function PosPage() {
 
     // Success — show confirmation
     setConfirmationData({
+      transactionId: result.transactionId,
       totalAmount: cart.totalAmount,
       cannabisGrams: cart.cannabisGramsTotal,
       paymentMethod: method,
@@ -257,6 +259,7 @@ export default function PosPage() {
   if (phase === 'confirmation' && confirmationData) {
     return (
       <CheckoutConfirmation
+        transactionId={confirmationData.transactionId}
         totalAmount={confirmationData.totalAmount}
         cannabisGrams={confirmationData.cannabisGrams}
         paymentMethod={confirmationData.paymentMethod}

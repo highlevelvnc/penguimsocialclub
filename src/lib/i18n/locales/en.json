@@ -19,6 +19,7 @@
   "common.no": "No",
   "common.all": "All",
   "common.optional": "Optional",
+  "common.close": "Close",
 
   "toast.member_created": "Member created",
   "toast.member_updated": "Member updated",
