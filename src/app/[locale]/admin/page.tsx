@@ -1,8 +1,11 @@
+import type { Metadata } from 'next'
 import Link from 'next/link'
 import { getTranslations } from '@/lib/i18n/server'
 import type { Locale } from '@/lib/i18n/config'
 import { getDashboardData } from '@/actions/dashboard'
 import { getStockAlerts } from '@/actions/stock-alerts'
+
+export const metadata: Metadata = { title: 'Dashboard | Penguin' }
 
 export default async function AdminDashboardPage({
   params,

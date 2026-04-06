@@ -1,9 +1,12 @@
+import type { Metadata } from 'next'
 import Link from 'next/link'
 import { getTranslations } from '@/lib/i18n/server'
 import type { Locale } from '@/lib/i18n/config'
 import { getMembers } from '@/actions/members'
 import { MemberStatusFilter } from '@/components/admin/member-status-filter'
 import { MemberSearch } from '@/components/admin/member-search'
+
+export const metadata: Metadata = { title: 'Members | Penguin' }
 
 const VALID_STATUSES = ['active', 'expired', 'suspended'] as const
 

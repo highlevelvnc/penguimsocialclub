@@ -123,7 +123,7 @@ export function MemberForm({ mode, memberId, initialData, defaultLimits }: Membe
     <form onSubmit={handleSubmit} className="space-y-5">
 
       {/* Section: Personal data */}
-      <FormSection title={t('member.full_name') + ' & ID'} icon="👤">
+      <FormSection title={t('form.section.personal')} icon="👤">
         <div className="space-y-4">
           {/* Name */}
           <div className="space-y-1.5">
@@ -199,7 +199,7 @@ export function MemberForm({ mode, memberId, initialData, defaultLimits }: Membe
       </FormSection>
 
       {/* Section: Membership */}
-      <FormSection title="Membresía" icon="📅">
+      <FormSection title={t('form.section.membership')} icon="📅">
         <div className="space-y-4">
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-1.5">
@@ -250,7 +250,7 @@ export function MemberForm({ mode, memberId, initialData, defaultLimits }: Membe
       </FormSection>
 
       {/* Section: Dispensing limits */}
-      <FormSection title="Límites de dispensación" icon="🌿">
+      <FormSection title={t('form.section.limits')} icon="🌿">
         <div className="grid grid-cols-2 gap-3">
           <div className="space-y-1.5">
             <Label htmlFor="daily_limit" className="text-xs text-zinc-500">{t('member.daily_limit')}</Label>
@@ -296,7 +296,7 @@ export function MemberForm({ mode, memberId, initialData, defaultLimits }: Membe
           onChange={(e) => setNotes(e.target.value)}
           rows={2}
           className="resize-none text-sm"
-          placeholder="Notas internas opcionales"
+          placeholder={t('form.notes_placeholder')}
         />
       </div>
 

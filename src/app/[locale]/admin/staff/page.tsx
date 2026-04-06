@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import { getTranslations } from '@/lib/i18n/server'
 import type { Locale } from '@/lib/i18n/config'
 import { getStaffUsers } from '@/actions/staff'
@@ -12,6 +13,8 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { StaffPageClient } from '@/components/admin/staff-page-client'
+
+export const metadata: Metadata = { title: 'Staff | Penguin' }
 
 export default async function StaffPage({
   params,

@@ -126,7 +126,7 @@ export function ProductForm({ mode, productId, initialData, subcategories }: Pro
     <form onSubmit={handleSubmit} className="space-y-5">
 
       {/* Section: Category */}
-      <FormSection title="Categoría" icon={categoryIcons[category]}>
+      <FormSection title={t('form.section.category')} icon={categoryIcons[category]}>
         <div className="space-y-4">
           {/* Name */}
           <div className="space-y-1.5">
@@ -186,19 +186,19 @@ export function ProductForm({ mode, productId, initialData, subcategories }: Pro
           {/* Auto-derived info badges */}
           <div className="flex gap-2">
             <span className="inline-flex items-center rounded-full bg-zinc-100 px-2.5 py-1 text-[11px] font-medium text-zinc-600">
-              {unitType === 'gram' ? '⚖️ Por gramo' : '📦 Por unidad'}
+              {unitType === 'gram' ? `⚖️ ${t('form.sold_by_gram')}` : `📦 ${t('form.sold_by_unit')}`}
             </span>
             <span className={`inline-flex items-center rounded-full px-2.5 py-1 text-[11px] font-medium ${
               countsTowardLimit ? 'bg-emerald-50 text-emerald-700' : 'bg-zinc-100 text-zinc-500'
             }`}>
-              {countsTowardLimit ? '🌿 Cuenta para límite' : 'Sin límite'}
+              {countsTowardLimit ? `🌿 ${t('form.counts_toward_limit')}` : t('form.no_limit')}
             </span>
           </div>
         </div>
       </FormSection>
 
       {/* Section: Pricing & Stock */}
-      <FormSection title="Precio & Stock" icon="💰">
+      <FormSection title={t('form.section.pricing')} icon="💰">
         <div className="grid grid-cols-3 gap-3">
           <div className="space-y-1.5">
             <Label htmlFor="price" className="text-xs text-zinc-500">{priceLabel}</Label>
@@ -274,14 +274,14 @@ export function ProductForm({ mode, productId, initialData, subcategories }: Pro
                 />
                 <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-zinc-400">g</span>
               </div>
-              <p className="text-xs text-zinc-400">gramos equivalentes por unidad para el límite de dispensación</p>
+              <p className="text-xs text-zinc-400">{t('form.gram_equiv_help')}</p>
             </div>
           </div>
         )}
       </FormSection>
 
       {/* Section: Details */}
-      <FormSection title="Detalles" icon="📝">
+      <FormSection title={t('form.section.details')} icon="📝">
         <div className="space-y-4">
           {/* Description */}
           <div className="space-y-1.5">
@@ -298,7 +298,7 @@ export function ProductForm({ mode, productId, initialData, subcategories }: Pro
           {/* Sort order + Active */}
           <div className="flex items-center gap-4">
             <div className="space-y-1.5 w-32">
-              <Label htmlFor="sort_order" className="text-xs text-zinc-500">Orden</Label>
+              <Label htmlFor="sort_order" className="text-xs text-zinc-500">{t('form.order')}</Label>
               <Input
                 id="sort_order"
                 type="number"

@@ -65,7 +65,7 @@ export function StockAdjustmentForm({
     setLoading(false)
 
     if (result.success) {
-      toast.success(t('stock.adjustment') + ' OK')
+      toast.success(t('toast.stock_adjusted'))
       setQuantity('')
       setReason('')
       router.refresh()

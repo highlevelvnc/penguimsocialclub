@@ -4,10 +4,8 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useT, useLocale } from '@/lib/i18n/client'
 import { createStaffUser, updateStaffUser } from '@/actions/staff'
-import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import {
   Select,
   SelectContent,
@@ -84,13 +82,13 @@ export function StaffForm({ mode, staffId, initialData, onSuccess }: StaffFormPr
   }
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>
+    <div className="rounded-xl border border-zinc-200 bg-white overflow-hidden">
+      <div className="border-b border-zinc-100 bg-zinc-50/50 px-5 py-3.5">
+        <h3 className="text-sm font-semibold text-zinc-900">
           {mode === 'create' ? t('staff.create') : t('common.edit')}
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
+        </h3>
+      </div>
+      <div className="p-5">
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Name */}
           <div className="space-y-1.5">
@@ -183,19 +181,30 @@ export function StaffForm({ mode, staffId, initialData, onSuccess }: StaffFormPr
 
           {/* Actions */}
           <div className="flex gap-3 pt-2">
-            <Button type="submit" disabled={loading}>
-              {loading ? t('common.loading') : t('common.save')}
-            </Button>
-            <Button
+            <button
+              type="submit"
+              disabled={loading}
+              className="flex-1 h-10 rounded-xl bg-zinc-900 text-sm font-bold text-white hover:bg-zinc-800 transition-all active:scale-[0.98] disabled:opacity-50"
+            >
+              {loading ? (
+                <span className="inline-flex items-center gap-2 justify-center">
+                  <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
+                  {t('common.loading')}
+                </span>
+              ) : (
+                t('common.save')
+              )}
+            </button>
+            <button
               type="button"
-              variant="outline"
+              className="h-10 rounded-xl border border-zinc-200 px-6 text-sm font-medium text-zinc-600 hover:bg-zinc-50 transition-all"
               onClick={() => router.back()}
             >
               {t('common.cancel')}
-            </Button>
+            </button>
           </div>
         </form>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   )
 }

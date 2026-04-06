@@ -46,7 +46,7 @@ export function MemberRenew({ memberId, currentEnd }: Props) {
       <div className="flex items-end gap-3">
         <div className="space-y-1.5 flex-1">
           <Label className="text-xs text-zinc-400">
-            Actual: <span className="tabular-nums font-medium text-zinc-600">{currentEnd}</span>
+            {t('close.date')}: <span className="tabular-nums font-medium text-zinc-600">{currentEnd}</span>
           </Label>
           <Input
             type="date"

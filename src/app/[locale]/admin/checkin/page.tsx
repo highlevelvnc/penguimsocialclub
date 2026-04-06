@@ -1,7 +1,10 @@
+import type { Metadata } from 'next'
 import { getTranslations } from '@/lib/i18n/server'
 import type { Locale } from '@/lib/i18n/config'
 import { getActiveCheckIns, getOccupancyCount, getTodayCheckInCount } from '@/actions/checkin'
 import { CheckInPageClient } from '@/components/admin/checkin-page-client'
+
+export const metadata: Metadata = { title: 'Check-in | Penguin' }
 
 export default async function CheckInPage({
   params,

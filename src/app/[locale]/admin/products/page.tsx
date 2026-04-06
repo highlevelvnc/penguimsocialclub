@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import Link from 'next/link'
 import { getTranslations } from '@/lib/i18n/server'
 import type { Locale } from '@/lib/i18n/config'
@@ -5,6 +6,8 @@ import { getProducts } from '@/actions/products'
 import { PRODUCT_CATEGORIES } from '@/lib/constants'
 import type { ProductCategory } from '@/lib/supabase/types'
 import { ProductCategoryFilter } from '@/components/admin/product-category-filter'
+
+export const metadata: Metadata = { title: 'Products | Penguin' }
 
 const categoryIcons: Record<ProductCategory, string> = {
   flower: '🌿',

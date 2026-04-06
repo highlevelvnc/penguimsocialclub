@@ -20,6 +20,7 @@ export function StaffPageClient({ staff, translations: tr, locale }: Props) {
   const t = useT()
   const router = useRouter()
   const [view, setView] = useState<ViewMode>('list')
+  const [confirmToggle, setConfirmToggle] = useState<string | null>(null)
 
   async function handleToggleActive(id: string, currentActive: boolean) {
     const result = await toggleStaffActive(id, !currentActive)
@@ -166,17 +167,36 @@ export function StaffPageClient({ staff, translations: tr, locale }: Props) {
                     >
                       {tr['common.edit']}
                     </button>
-                    <button
-                      type="button"
-                      className={`rounded-lg border px-3 py-1.5 text-xs font-medium transition-colors ${
-                        s.active
-                          ? 'border-red-200 text-red-600 hover:bg-red-50'
-                          : 'border-emerald-200 text-emerald-600 hover:bg-emerald-50'
-                      }`}
-                      onClick={() => handleToggleActive(s.id, s.active)}
-                    >
-                      {s.active ? tr['staff.deactivate'] : tr['common.active']}
-                    </button>
+                    {confirmToggle === s.id ? (
+                      <div className="flex items-center gap-1.5">
+                        <button
+                          type="button"
+                          className="rounded-lg border border-red-200 bg-red-50 px-3 py-1.5 text-xs font-semibold text-red-600 hover:bg-red-100 transition-colors"
+                          onClick={() => { handleToggleActive(s.id, s.active); setConfirmToggle(null) }}
+                        >
+                          {tr['common.confirm']}
+                        </button>
+                        <button
+                          type="button"
+                          className="rounded-lg border border-zinc-200 px-2 py-1.5 text-xs text-zinc-500 hover:bg-zinc-50 transition-colors"
+                          onClick={() => setConfirmToggle(null)}
+                        >
+                          {tr['common.cancel']}
+                        </button>
+                      </div>
+                    ) : (
+                      <button
+                        type="button"
+                        className={`rounded-lg border px-3 py-1.5 text-xs font-medium transition-colors ${
+                          s.active
+                            ? 'border-red-200 text-red-600 hover:bg-red-50'
+                            : 'border-emerald-200 text-emerald-600 hover:bg-emerald-50'
+                        }`}
+                        onClick={() => s.active ? setConfirmToggle(s.id) : handleToggleActive(s.id, s.active)}
+                      >
+                        {s.active ? tr['staff.deactivate'] : tr['common.active']}
+                      </button>
+                    )}
                   </div>
                 </div>
               )

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useT } from '@/lib/i18n/client'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -18,6 +18,24 @@ interface Props {
 export function GramInput({ productName, pricePerGram, maxGrams, onConfirm, onCancel }: Props) {
   const t = useT()
   const [value, setValue] = useState('')
+
+  // Keyboard shortcuts: Enter = confirm, Escape = cancel
+  const handleKeyDown = useCallback((e: KeyboardEvent) => {
+    if (e.key === 'Escape') {
+      onCancel()
+    } else if (e.key === 'Enter') {
+      const g = parseFloat(value) || 0
+      const exceeds = maxGrams !== null && g > maxGrams
+      if (g > 0 && !exceeds) {
+        onConfirm(g)
+      }
+    }
+  }, [value, maxGrams, onConfirm, onCancel])
+
+  useEffect(() => {
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [handleKeyDown])
 
   const grams = parseFloat(value) || 0
   const total = Math.round(grams * pricePerGram * 100) / 100

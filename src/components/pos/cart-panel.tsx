@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import { useT } from '@/lib/i18n/client'
 import type { CartState } from '@/lib/pos/cart'
 
@@ -26,6 +27,7 @@ export function CartPanel({
 }: Props) {
   const t = useT()
   const isEmpty = cart.items.length === 0
+  const [confirmClear, setConfirmClear] = useState(false)
 
   return (
     <div className="flex h-full flex-col border-l border-zinc-800 bg-zinc-900">
@@ -40,13 +42,33 @@ export function CartPanel({
           )}
         </div>
         {!isEmpty && (
-          <button
-            type="button"
-            className="text-[11px] text-zinc-500 hover:text-red-400 transition-colors"
-            onClick={onClear}
-          >
-            {t('pos.clear_cart')}
-          </button>
+          confirmClear ? (
+            <div className="flex items-center gap-1.5">
+              <button
+                type="button"
+                className="text-[11px] font-semibold text-red-400 hover:text-red-300 transition-colors"
+                onClick={() => { onClear(); setConfirmClear(false) }}
+              >
+                {t('common.confirm')}
+              </button>
+              <span className="text-zinc-700">|</span>
+              <button
+                type="button"
+                className="text-[11px] text-zinc-500 hover:text-zinc-300 transition-colors"
+                onClick={() => setConfirmClear(false)}
+              >
+                {t('common.cancel')}
+              </button>
+            </div>
+          ) : (
+            <button
+              type="button"
+              className="text-[11px] text-zinc-500 hover:text-red-400 transition-colors"
+              onClick={() => setConfirmClear(true)}
+            >
+              {t('pos.clear_cart')}
+            </button>
+          )
         )}
       </div>
 
