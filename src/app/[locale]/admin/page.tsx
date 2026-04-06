@@ -89,6 +89,39 @@ export default async function AdminDashboardPage({
         </div>
       </div>
 
+      {/* Expiring memberships banner */}
+      {data.expiringMembers.length > 0 && (
+        <div className="rounded-xl border border-amber-200 bg-amber-50 overflow-hidden animate-fade-in-up">
+          <div className="border-b border-amber-200 px-5 py-3 flex items-center gap-2">
+            <svg className="h-4 w-4 text-amber-600" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <h3 className="text-sm font-semibold text-amber-800">
+              {tr['dashboard.expiring_soon']} ({data.expiringMembers.length})
+            </h3>
+          </div>
+          <div className="divide-y divide-amber-100">
+            {data.expiringMembers.slice(0, 8).map((m) => (
+              <Link
+                key={m.id}
+                href={`/${locale}/admin/members/${m.id}`}
+                className="flex items-center justify-between px-5 py-2 hover:bg-amber-100/50 transition-colors"
+              >
+                <span className="text-sm text-amber-900">{m.full_name}</span>
+                <div className="flex items-center gap-2">
+                  <span className="text-xs text-amber-600 tabular-nums">{m.membership_end}</span>
+                  <span className={`rounded-full px-2 py-0.5 text-[10px] font-semibold ${
+                    m.days_left <= 7 ? 'bg-red-100 text-red-700' : 'bg-amber-100 text-amber-700'
+                  }`}>
+                    {m.days_left}d
+                  </span>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* Stock alerts + Top products */}
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
         {/* Stock alerts with velocity */}

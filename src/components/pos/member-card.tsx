@@ -10,6 +10,7 @@ interface Props {
   remainingDaily: number
   remainingMonthly: number
   lastVisit: string | null
+  lastItems: { name: string; quantity: number; unitType: string }[]
   onChangeMember: () => void
 }
 
@@ -19,6 +20,7 @@ export function PosMemberCard({
   remainingDaily,
   remainingMonthly,
   lastVisit,
+  lastItems,
   onChangeMember,
 }: Props) {
   const t = useT()
@@ -112,6 +114,21 @@ export function PosMemberCard({
           </div>
         </div>
       </div>
+
+      {/* Last purchase items */}
+      {lastItems.length > 0 && (
+        <div className="flex items-center gap-2 px-4 py-2 bg-zinc-800/20 border-t border-zinc-800/40 overflow-x-auto">
+          <span className="text-[10px] text-zinc-600 flex-shrink-0 uppercase tracking-wider">{t('member.last_visit')}</span>
+          {lastItems.map((item, i) => (
+            <span
+              key={i}
+              className="flex-shrink-0 rounded-full bg-zinc-800/60 px-2 py-0.5 text-[10px] text-zinc-400 tabular-nums"
+            >
+              {item.name} {item.unitType === 'gram' ? `${item.quantity}g` : `×${item.quantity}`}
+            </span>
+          ))}
+        </div>
+      )}
     </div>
   )
 }

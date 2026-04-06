@@ -72,6 +72,15 @@ const navItems = [
       </svg>
     ),
   },
+  {
+    key: 'audit.title',
+    href: '/admin/audit',
+    icon: (
+      <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" strokeWidth={1.8} stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 7.5V6.108c0-1.135.845-2.098 1.976-2.192.373-.03.748-.057 1.123-.08M15.75 18H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08M15.75 18.75v-1.875a3.375 3.375 0 00-3.375-3.375h-1.5a1.125 1.125 0 01-1.125-1.125v-1.5A3.375 3.375 0 006.375 7.5H6M15.75 18.75h-9A2.25 2.25 0 014.5 16.5V6.108c0-1.135.845-2.098 1.976-2.192a48.507 48.507 0 011.123-.08" />
+      </svg>
+    ),
+  },
 ] as const
 
 export function AdminSidebar({

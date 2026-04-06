@@ -4,6 +4,7 @@ import { useState } from 'react'
 import Image from 'next/image'
 import { useT } from '@/lib/i18n/client'
 import { getMonthlyReport, type MonthlyReportData } from '@/actions/reports'
+import { exportMembersCSV, exportTransactionsCSV, exportProductsCSV } from '@/actions/export'
 
 interface Props {
   translations: Record<string, string>
@@ -20,6 +21,31 @@ export function ReportPageClient({ translations: tr, locale }: Props) {
   const [month, setMonth] = useState(getCurrentMonth())
   const [report, setReport] = useState<MonthlyReportData | null>(null)
   const [loading, setLoading] = useState(false)
+
+  function downloadCSV(csv: string, filename: string) {
+    const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = filename
+    a.click()
+    URL.revokeObjectURL(url)
+  }
+
+  async function handleExportMembers() {
+    const csv = await exportMembersCSV()
+    downloadCSV(csv, `members_${month}.csv`)
+  }
+
+  async function handleExportTransactions() {
+    const csv = await exportTransactionsCSV(month)
+    downloadCSV(csv, `transactions_${month}.csv`)
+  }
+
+  async function handleExportProducts() {
+    const csv = await exportProductsCSV()
+    downloadCSV(csv, `products_${month}.csv`)
+  }
 
   async function handleGenerate() {
     setLoading(true)
@@ -76,6 +102,20 @@ export function ReportPageClient({ translations: tr, locale }: Props) {
             PDF
           </button>
         )}
+      </div>
+
+      {/* CSV exports */}
+      <div className="flex flex-wrap gap-2">
+        <span className="text-xs text-zinc-400 self-center mr-1">CSV:</span>
+        <button type="button" onClick={handleExportMembers} className="rounded-lg border border-zinc-200 px-3 py-1.5 text-xs font-medium text-zinc-600 hover:bg-zinc-50 transition-all">
+          {tr['nav.members']}
+        </button>
+        <button type="button" onClick={handleExportTransactions} className="rounded-lg border border-zinc-200 px-3 py-1.5 text-xs font-medium text-zinc-600 hover:bg-zinc-50 transition-all">
+          {tr['dashboard.transactions']}
+        </button>
+        <button type="button" onClick={handleExportProducts} className="rounded-lg border border-zinc-200 px-3 py-1.5 text-xs font-medium text-zinc-600 hover:bg-zinc-50 transition-all">
+          {tr['nav.products']}
+        </button>
       </div>
 
       {/* Report content */}

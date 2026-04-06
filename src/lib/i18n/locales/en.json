@@ -256,6 +256,10 @@
 
   "auth.rate_limited": "Too many attempts. Wait {seconds}s",
 
+  "audit.title": "Audit log",
+  "audit.description": "All staff actions",
+  "audit.no_entries": "No entries",
+
   "report.title": "Reports",
   "report.monthly_description": "Monthly operations summary",
   "report.select_month": "Month",

@@ -46,8 +46,12 @@ export function PosProductGrid({
   const [activeCategory, setActiveCategory] = useState<ProductCategory>('flower')
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
   const [unitQty, setUnitQty] = useState('1')
+  const [searchQuery, setSearchQuery] = useState('')
 
-  const filtered = products.filter((p) => p.category === activeCategory)
+  const isSearching = searchQuery.length >= 2
+  const filtered = isSearching
+    ? products.filter((p) => p.name.toLowerCase().includes(searchQuery.toLowerCase()))
+    : products.filter((p) => p.category === activeCategory)
   const subMap = new Map(subcategories.map((s) => [s.id, s.key]))
 
   const categoryCounts = new Map<string, number>()
@@ -89,22 +93,49 @@ export function PosProductGrid({
 
   return (
     <div className="flex h-full flex-col overflow-hidden rounded-t-2xl border border-zinc-800 bg-zinc-900/50">
-      {/* Category tabs */}
-      <div className="flex gap-1 border-b border-zinc-800 px-3 py-2 overflow-x-auto bg-zinc-900/80">
+      {/* Search + Category tabs */}
+      <div className="flex items-center gap-2 border-b border-zinc-800 px-3 py-2 overflow-x-auto bg-zinc-900/80">
+        {/* Quick search */}
+        <div className="relative flex-shrink-0">
+          <svg className="absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-zinc-500" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+          </svg>
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder={t('common.search')}
+            className="h-7 w-28 rounded-lg border border-zinc-700/50 bg-zinc-800/50 pl-8 pr-2 text-xs text-white placeholder:text-zinc-600 outline-none focus:w-40 focus:border-emerald-500/30 focus:ring-1 focus:ring-emerald-500/10 transition-all"
+          />
+          {searchQuery && (
+            <button
+              type="button"
+              onClick={() => setSearchQuery('')}
+              className="absolute right-1.5 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-zinc-300 text-xs"
+            >
+              ×
+            </button>
+          )}
+        </div>
+
+        {/* Divider */}
+        <div className="h-4 w-px bg-zinc-800 flex-shrink-0" />
         {PRODUCT_CATEGORIES.map((cat) => {
           const count = categoryCounts.get(cat) ?? 0
           if (count === 0) return null
-          const isActive = activeCategory === cat
+          const isActive = activeCategory === cat && !isSearching
           return (
             <button
               key={cat}
               type="button"
-              onClick={() => { setActiveCategory(cat); setSelectedProduct(null) }}
+              onClick={() => { setActiveCategory(cat); setSelectedProduct(null); setSearchQuery('') }}
               className={`
                 flex items-center gap-2 whitespace-nowrap rounded-xl px-3 py-1.5 text-xs font-medium transition-all
-                ${isActive
-                  ? 'bg-zinc-800 text-white shadow-sm ring-1 ring-zinc-700'
-                  : 'text-zinc-500 hover:bg-zinc-800/50 hover:text-zinc-300'}
+                ${isSearching
+                  ? 'text-zinc-600 opacity-50'
+                  : isActive
+                    ? 'bg-zinc-800 text-white shadow-sm ring-1 ring-zinc-700'
+                    : 'text-zinc-500 hover:bg-zinc-800/50 hover:text-zinc-300'}
               `}
             >
               <div className="relative h-5 w-5 flex-shrink-0 overflow-hidden rounded">

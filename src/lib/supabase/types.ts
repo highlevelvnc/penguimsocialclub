@@ -413,6 +413,29 @@ export type Database = {
           description?: string | null
         }
       }
+      audit_log: {
+        Row: {
+          id: string
+          shop_id: string
+          staff_id: string
+          action: string
+          entity_type: string | null
+          entity_id: string | null
+          details: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          shop_id: string
+          staff_id: string
+          action: string
+          entity_type?: string | null
+          entity_id?: string | null
+          details?: string | null
+          created_at?: string
+        }
+        Update: {}
+      }
       check_ins: {
         Row: {
           id: string

@@ -38,6 +38,7 @@ export default function PosPage() {
   const [products, setProducts] = useState<Product[]>([])
   const [subcategories, setSubcategories] = useState<SubcategoryInfo[]>([])
   const [checkingOut, setCheckingOut] = useState(false)
+  const [lastItems, setLastItems] = useState<{ name: string; quantity: number; unitType: string }[]>([])
   const [loyaltyDiscount, setLoyaltyDiscount] = useState(0)
   const [loyaltyPointsToRedeem, setLoyaltyPointsToRedeem] = useState(0)
 
@@ -172,6 +173,34 @@ export default function PosPage() {
       )
     } else {
       setLastVisit(null)
+    }
+
+    // Fetch last purchased items (for quick reorder)
+    if (last && last.length > 0) {
+      const lastTxnId = (lastTxn as { id?: string }[])?.[0]
+      // Get the most recent transaction ID
+      const { data: recentTxn } = await supabase
+        .from('transactions')
+        .select('id')
+        .eq('member_id', selectedMember.id)
+        .eq('shop_id', SHOP_ID)
+        .order('created_at', { ascending: false })
+        .limit(1)
+
+      if (recentTxn && recentTxn.length > 0) {
+        const txnId = (recentTxn[0] as { id: string }).id
+        const { data: items } = await supabase
+          .from('transaction_items')
+          .select('product_name, quantity, unit_type')
+          .eq('transaction_id', txnId)
+
+        setLastItems(
+          ((items as { product_name: string; quantity: number; unit_type: string }[] | null) ?? [])
+            .map(i => ({ name: i.product_name, quantity: i.quantity, unitType: i.unit_type }))
+        )
+      }
+    } else {
+      setLastItems([])
     }
 
     setPhase('dispensing')
@@ -389,6 +418,7 @@ export default function PosPage() {
             remainingDaily={remaining.daily}
             remainingMonthly={remaining.monthly}
             lastVisit={lastVisit}
+            lastItems={lastItems}
             onChangeMember={handleChangeMember}
           />
         </div>

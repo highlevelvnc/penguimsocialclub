@@ -4,6 +4,7 @@ import { revalidatePath } from 'next/cache'
 import { createAdminClient } from '@/lib/supabase/admin'
 import { SHOP_ID } from '@/lib/constants'
 import type { Member, Transaction } from '@/lib/supabase/types'
+import { logAudit } from './audit'
 
 export interface MemberFormData {
   full_name: string
@@ -88,6 +89,7 @@ export async function createMember(data: MemberFormData): Promise<
   }
 
   revalidatePath('/[locale]/admin/members')
+  logAudit({ action: 'member.create', entityType: 'member', entityId: (member as { id: string }).id, details: data.full_name })
   return { success: true, id: (member as { id: string }).id }
 }
 

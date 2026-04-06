@@ -3,6 +3,7 @@
 import { createAdminClient } from '@/lib/supabase/admin'
 import { getPinSession, touchSession } from '@/lib/session'
 import type { CartItem } from '@/lib/pos/cart'
+import { logAudit } from './audit'
 
 interface CheckoutInput {
   shopId: string
@@ -111,6 +112,14 @@ export async function checkout(input: CheckoutInput): Promise<CheckoutResult> {
 
   // Calculate points earned for the UI (same formula as DB)
   const pointsEarned = Math.floor(totalAmount)
+
+  // Audit
+  logAudit({
+    action: 'checkout',
+    entityType: 'transaction',
+    entityId: data as string,
+    details: `€${totalAmount.toFixed(2)} (${input.paymentMethod}) — ${cannabisGramsTotal}g cannabis`,
+  })
 
   return { success: true, transactionId: data as string, pointsEarned }
 }

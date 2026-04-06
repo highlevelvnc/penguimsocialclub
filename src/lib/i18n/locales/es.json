@@ -256,6 +256,10 @@
 
   "auth.rate_limited": "Demasiados intentos. Espera {seconds}s",
 
+  "audit.title": "Log de auditoría",
+  "audit.description": "Todas las acciones del personal",
+  "audit.no_entries": "Sin registros",
+
   "report.title": "Informes",
   "report.monthly_description": "Resumen mensual de operaciones",
   "report.select_month": "Mes",

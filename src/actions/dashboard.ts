@@ -20,6 +20,14 @@ export interface DashboardData {
   totalExpiredMembers: number
   expiringSoonCount: number
 
+  // Expiring memberships
+  expiringMembers: {
+    id: string
+    full_name: string
+    membership_end: string
+    days_left: number
+  }[]
+
   // Stock alerts
   lowStockProducts: {
     id: string
@@ -75,6 +83,7 @@ export async function getDashboardData(): Promise<DashboardData> {
     activeMembersResult,
     expiredMembersResult,
     expiringSoonResult,
+    expiringMembersResult,
     lowStockResult,
     topProductsResult,
     recentTxnResult,
@@ -113,7 +122,17 @@ export async function getDashboardData(): Promise<DashboardData> {
       .gte('membership_end', today)
       .lte('membership_end', soon),
 
-    // 6. Low stock products
+    // 6. Expiring members (next 30 days with names)
+    supabase
+      .from('members')
+      .select('id, full_name, membership_end')
+      .eq('shop_id', SHOP_ID)
+      .eq('status', 'active')
+      .gte('membership_end', today)
+      .lte('membership_end', soon)
+      .order('membership_end'),
+
+    // 7. Low stock products
     supabase
       .from('products')
       .select('id, name, stock_quantity, low_stock_threshold, unit_type')
@@ -211,6 +230,14 @@ export async function getDashboardData(): Promise<DashboardData> {
     totalActiveMembers: activeMembersResult.count ?? 0,
     totalExpiredMembers: expiredMembersResult.count ?? 0,
     expiringSoonCount: expiringSoonResult.count ?? 0,
+
+    expiringMembers: ((expiringMembersResult.data as { id: string; full_name: string; membership_end: string }[] | null) ?? [])
+      .map(m => ({
+        id: m.id,
+        full_name: m.full_name,
+        membership_end: m.membership_end,
+        days_left: Math.ceil((new Date(m.membership_end).getTime() - Date.now()) / 86400000),
+      })),
 
     lowStockProducts,
     topProducts,
