@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import Image from 'next/image'
 import { createClient } from '@/lib/supabase/client'
 import { useT, useLocale } from '@/lib/i18n/client'
 
@@ -41,11 +42,17 @@ export default function LoginPage() {
       <div className="pointer-events-none absolute -top-40 -left-40 h-96 w-96 rounded-full bg-emerald-500/5 blur-3xl" />
       <div className="pointer-events-none absolute -bottom-40 -right-40 h-96 w-96 rounded-full bg-emerald-500/5 blur-3xl" />
 
-      <div className="relative w-full max-w-sm px-6">
+      <div className="relative w-full max-w-sm px-6 animate-fade-in-up">
         {/* Logo */}
         <div className="mb-8 text-center">
-          <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-emerald-500/10 border border-emerald-500/20">
-            <span className="text-3xl">🐧</span>
+          <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-white/5 border border-white/10 backdrop-blur-sm shadow-2xl">
+            <Image
+              src="/logo.png"
+              alt="Penguin Social Club"
+              width={44}
+              height={44}
+              className="rounded-lg"
+            />
           </div>
           <h1 className="text-xl font-bold text-white">{t('app.name')}</h1>
           <p className="mt-1 text-sm text-zinc-400">{t('auth.login')}</p>

@@ -60,7 +60,7 @@ export default function PosLockPage() {
       {/* Dark overlay for readability */}
       <div className="absolute inset-0 bg-zinc-950/85 backdrop-blur-sm" />
 
-      <div className="relative z-10 w-full max-w-sm px-6 space-y-10">
+      <div className="relative z-10 w-full max-w-sm px-6 space-y-10 animate-fade-in-up">
         {/* Brand — real logo */}
         <div className="text-center space-y-3">
           <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-2xl bg-white/10 border border-white/10 backdrop-blur-md shadow-2xl">
@@ -157,18 +157,7 @@ export default function PosLockPage() {
         </div>
       </div>
 
-      <style jsx>{`
-        @keyframes shake {
-          0%, 100% { transform: translateX(0); }
-          20% { transform: translateX(-8px); }
-          40% { transform: translateX(8px); }
-          60% { transform: translateX(-6px); }
-          80% { transform: translateX(6px); }
-        }
-        .animate-shake {
-          animation: shake 0.4s ease-in-out;
-        }
-      `}</style>
+      {/* shake animation defined in globals.css */}
     </div>
   )
 }

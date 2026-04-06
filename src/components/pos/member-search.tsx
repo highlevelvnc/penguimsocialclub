@@ -91,7 +91,7 @@ export function PosMemberSearch({ onSelect }: Props) {
 
       {/* Results dropdown */}
       {open && results.length > 0 && (
-        <div className="absolute top-full left-0 right-0 z-50 mt-2 rounded-2xl border border-zinc-700 bg-zinc-800/95 shadow-2xl shadow-black/30 overflow-hidden backdrop-blur-md">
+        <div className="absolute top-full left-0 right-0 z-50 mt-2 rounded-2xl border border-zinc-700/50 bg-zinc-800/95 shadow-2xl shadow-black/40 overflow-hidden backdrop-blur-xl animate-slide-down">
           {results.map((member, idx) => {
             const isExpired = new Date(member.membership_end) < new Date()
             const effectiveStatus = isExpired && member.status === 'active' ? 'expired' : member.status

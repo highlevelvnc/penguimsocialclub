@@ -73,7 +73,7 @@ export function CartPanel({
       </div>
 
       {/* Cart items */}
-      <div className="flex-1 overflow-y-auto">
+      <div className="flex-1 overflow-y-auto dark-scrollbar">
         {isEmpty ? (
           <div className="flex h-full flex-col items-center justify-center gap-2 text-zinc-600">
             <svg className="h-8 w-8 text-zinc-700" fill="none" viewBox="0 0 24 24" strokeWidth={1.2} stroke="currentColor">
@@ -84,7 +84,7 @@ export function CartPanel({
         ) : (
           <div className="divide-y divide-zinc-800/50">
             {cart.items.map((item) => (
-              <div key={item.id} className="flex items-start justify-between px-4 py-2.5 hover:bg-zinc-800/30 group transition-colors">
+              <div key={item.id} className="flex items-start justify-between px-4 py-2.5 hover:bg-zinc-800/30 group transition-colors animate-slide-in-right">
                 <div className="flex-1 min-w-0">
                   <div className="text-sm font-medium text-zinc-200 truncate">{item.productName}</div>
                   <div className="text-[11px] text-zinc-400 tabular-nums mt-0.5">
@@ -142,7 +142,7 @@ export function CartPanel({
         {/* Total */}
         <div className="flex items-center justify-between px-4 py-3 border-t border-zinc-800/50">
           <span className="text-sm font-bold text-zinc-300">{t('pos.total')}</span>
-          <span className="text-2xl font-bold text-white tabular-nums">
+          <span key={cart.totalAmount} className="text-2xl font-bold text-white tabular-nums animate-count-pop">
             {'\u20AC'}{cart.totalAmount.toFixed(2)}
           </span>
         </div>

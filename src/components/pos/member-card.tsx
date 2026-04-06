@@ -39,7 +39,7 @@ export function PosMemberCard({
   const initials = member.full_name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase()
 
   return (
-    <div className="rounded-xl border border-zinc-800 bg-zinc-900 overflow-hidden">
+    <div className="rounded-xl border border-zinc-800/60 bg-zinc-900/80 overflow-hidden animate-fade-in-up backdrop-blur-sm">
       {/* Top bar with member info */}
       <div className="flex items-center justify-between px-4 py-2.5 bg-zinc-800/40 border-b border-zinc-800/60">
         <div className="flex items-center gap-3">

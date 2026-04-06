@@ -93,7 +93,7 @@ export function AdminSidebar({
     .toUpperCase()
 
   return (
-    <aside className="flex w-56 flex-col border-r border-zinc-200 bg-white">
+    <aside className="flex w-56 flex-col border-r border-zinc-200/80 bg-white/80 backdrop-blur-xl">
       {/* Logo */}
       <div className="flex h-14 items-center gap-2.5 border-b border-zinc-100 px-4">
         <span className="text-xl">🐧</span>
@@ -115,10 +115,10 @@ export function AdminSidebar({
               key={item.key}
               href={href}
               className={cn(
-                'flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium transition-all',
+                'flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium transition-all duration-200',
                 isActive
-                  ? 'bg-emerald-50 text-emerald-700'
-                  : 'text-zinc-600 hover:bg-zinc-50 hover:text-zinc-900'
+                  ? 'bg-emerald-50 text-emerald-700 shadow-sm shadow-emerald-500/5'
+                  : 'text-zinc-500 hover:bg-zinc-50 hover:text-zinc-900 hover:translate-x-0.5'
               )}
             >
               <span className={isActive ? 'text-emerald-600' : 'text-zinc-400'}>

@@ -47,7 +47,7 @@ export function GramInput({ productName, pricePerGram, maxGrams, onConfirm, onCa
   }
 
   return (
-    <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-4 space-y-3">
+    <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/[0.03] p-4 space-y-3">
       <div className="flex items-center justify-between">
         <span className="font-semibold text-sm text-zinc-100">{productName}</span>
         <span className="text-xs text-zinc-400">{'\u20AC'}{pricePerGram.toFixed(2)}/g</span>
@@ -67,10 +67,10 @@ export function GramInput({ productName, pricePerGram, maxGrams, onConfirm, onCa
               className={`
                 flex-1 rounded-lg py-2.5 text-sm font-medium tabular-nums transition-all
                 ${isSelected
-                  ? 'bg-emerald-500 text-white shadow-sm shadow-emerald-500/25'
+                  ? 'bg-emerald-500 text-white shadow-md shadow-emerald-500/25 scale-[1.02]'
                   : disabled
-                    ? 'bg-zinc-800 text-zinc-600 cursor-not-allowed'
-                    : 'bg-zinc-800 text-zinc-300 border border-zinc-700 hover:border-emerald-500/30 hover:text-emerald-400'}
+                    ? 'bg-zinc-800/50 text-zinc-600 cursor-not-allowed'
+                    : 'bg-zinc-800 text-zinc-300 border border-zinc-700/50 hover:border-emerald-500/30 hover:text-emerald-400 hover:bg-zinc-700/50 active:scale-95'}
               `}
             >
               {g}g

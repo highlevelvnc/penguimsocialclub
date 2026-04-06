@@ -29,11 +29,11 @@ export function CheckoutConfirmation({
   return (
     <>
       <div className="flex h-full items-center justify-center">
-        <div className="w-full max-w-sm text-center space-y-6 px-6">
+        <div className="w-full max-w-sm text-center space-y-6 px-6 animate-fade-in-up">
           {/* Success icon */}
-          <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-emerald-500/15 ring-1 ring-emerald-500/30">
+          <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-emerald-500/15 ring-1 ring-emerald-500/30 animate-fade-in-scale">
             <svg className="h-10 w-10 text-emerald-400" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+              <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" strokeDasharray="30" className="animate-draw-check" />
             </svg>
           </div>
 

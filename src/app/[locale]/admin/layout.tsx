@@ -47,7 +47,7 @@ export default async function AdminLayout({
         staffName={(staffUser as { full_name: string }).full_name}
         lowStockCount={lowStockCount}
       />
-      <main className="flex-1 overflow-auto bg-zinc-50 p-6">
+      <main className="flex-1 overflow-auto bg-gradient-to-br from-zinc-50 via-white to-zinc-50/80 p-6">
         {children}
       </main>
     </div>

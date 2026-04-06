@@ -127,7 +127,7 @@ export function PosProductGrid({
 
       {/* Input overlay */}
       {selectedProduct && (
-        <div className="border-b border-zinc-800 px-3 py-3 bg-zinc-900">
+        <div className="border-b border-zinc-800 px-3 py-3 bg-zinc-900 animate-slide-down">
           {selectedProduct.unit_type === 'gram' ? (
             <GramInput
               productName={selectedProduct.name}
@@ -199,13 +199,13 @@ export function PosProductGrid({
       )}
 
       {/* Product grid */}
-      <div className="flex-1 overflow-y-auto p-3">
+      <div className="flex-1 overflow-y-auto p-3 dark-scrollbar">
         {filtered.length === 0 ? (
-          <div className="flex h-full items-center justify-center">
+          <div className="flex h-full items-center justify-center animate-fade-in-up">
             <p className="text-sm text-zinc-600">{t('common.no_results')}</p>
           </div>
         ) : (
-          <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-4">
+          <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-4 stagger-children">
             {filtered.map((product) => (
               <PosProductCard
                 key={product.id}

@@ -297,18 +297,23 @@ export default function PosPage() {
           src="/background.png"
           alt=""
           fill
-          className="object-cover opacity-10"
+          className="object-cover opacity-[0.07]"
           quality={40}
         />
-        <div className="relative z-10 w-full max-w-md space-y-8 text-center">
+        {/* Subtle radial glow */}
+        <div className="pointer-events-none absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[500px] w-[500px] rounded-full bg-emerald-500/[0.03] blur-3xl" />
+
+        <div className="relative z-10 w-full max-w-md space-y-8 text-center animate-fade-in-up">
           <div className="space-y-3">
-            <Image
-              src="/logo.png"
-              alt="Penguin Social Club"
-              width={56}
-              height={56}
-              className="mx-auto rounded-xl"
-            />
+            <div className="mx-auto w-16 h-16 rounded-2xl bg-zinc-800/50 border border-zinc-700/30 flex items-center justify-center backdrop-blur-sm shadow-2xl shadow-black/20">
+              <Image
+                src="/logo.png"
+                alt="Penguin Social Club"
+                width={44}
+                height={44}
+                className="rounded-lg"
+              />
+            </div>
             <h2 className="text-lg font-semibold text-zinc-100">
               {t('pos.select_member')}
             </h2>
