@@ -1,7 +1,7 @@
 'use server'
 
 import { createAdminClient } from '@/lib/supabase/admin'
-import { getPinSession } from '@/lib/session'
+import { getPinSession, touchSession } from '@/lib/session'
 import type { CartItem } from '@/lib/pos/cart'
 
 interface CheckoutInput {
@@ -22,7 +22,7 @@ type CheckoutError =
   | 'CHECKOUT_FAILED'
 
 type CheckoutResult =
-  | { success: true; transactionId: string }
+  | { success: true; transactionId: string; pointsEarned: number }
   | { success: false; error: CheckoutError; remaining?: number; details?: string }
 
 export async function checkout(input: CheckoutInput): Promise<CheckoutResult> {
@@ -36,37 +36,12 @@ export async function checkout(input: CheckoutInput): Promise<CheckoutResult> {
     return { success: false, error: 'EMPTY_CART' }
   }
 
+  // Touch session (reset idle timer)
+  await touchSession()
+
   const supabase = createAdminClient()
 
-  // 2. Validate member status
-  const { data: member } = await supabase
-    .from('members')
-    .select('status, membership_end, daily_limit_grams, monthly_limit_grams')
-    .eq('id', input.memberId)
-    .eq('shop_id', input.shopId)
-    .single()
-
-  if (!member) {
-    return { success: false, error: 'MEMBER_NOT_ACTIVE' }
-  }
-
-  const m = member as {
-    status: string
-    membership_end: string
-    daily_limit_grams: number
-    monthly_limit_grams: number
-  }
-
-  if (m.status !== 'active') {
-    return { success: false, error: 'MEMBER_NOT_ACTIVE' }
-  }
-
-  if (new Date(m.membership_end) < new Date()) {
-    return { success: false, error: 'MEMBERSHIP_EXPIRED' }
-  }
-
-  // 3. Server-side recalculation of cannabis grams
-  // Never trust client-sent totals — recompute from items
+  // 2. Server-side recalculation of totals (never trust client)
   let cannabisGramsTotal = 0
   let totalAmount = 0
 
@@ -78,41 +53,7 @@ export async function checkout(input: CheckoutInput): Promise<CheckoutResult> {
   cannabisGramsTotal = Math.round(cannabisGramsTotal * 100) / 100
   totalAmount = Math.round(totalAmount * 100) / 100
 
-  // 4. Fetch current dispensing totals from DB
-  const [todayRes, monthRes] = await Promise.all([
-    supabase.rpc('get_member_dispensed_today', {
-      p_member_id: input.memberId,
-      p_shop_id: input.shopId,
-    }),
-    supabase.rpc('get_member_dispensed_month', {
-      p_member_id: input.memberId,
-      p_shop_id: input.shopId,
-    }),
-  ])
-
-  const dispensedToday = (todayRes.data as number) ?? 0
-  const dispensedMonth = (monthRes.data as number) ?? 0
-
-  // 5. Enforce limits
-  const remainingDaily = m.daily_limit_grams - dispensedToday
-  if (cannabisGramsTotal > remainingDaily) {
-    return {
-      success: false,
-      error: 'DAILY_LIMIT_EXCEEDED',
-      remaining: Math.max(0, Math.round(remainingDaily * 100) / 100),
-    }
-  }
-
-  const remainingMonthly = m.monthly_limit_grams - dispensedMonth
-  if (cannabisGramsTotal > remainingMonthly) {
-    return {
-      success: false,
-      error: 'MONTHLY_LIMIT_EXCEEDED',
-      remaining: Math.max(0, Math.round(remainingMonthly * 100) / 100),
-    }
-  }
-
-  // 6. Build items payload for the DB function
+  // 3. Build items payload for the DB function
   const dbItems = input.items.map((item) => ({
     productId: item.productId,
     productName: item.productName,
@@ -124,7 +65,7 @@ export async function checkout(input: CheckoutInput): Promise<CheckoutResult> {
     cannabisGrams: item.cannabisGrams,
   }))
 
-  // 7. Execute atomic checkout
+  // 4. Execute atomic checkout (DB handles: limits, stock, loyalty — all in one transaction)
   const { data, error } = await supabase.rpc('execute_checkout', {
     p_shop_id: input.shopId,
     p_member_id: input.memberId,
@@ -137,12 +78,39 @@ export async function checkout(input: CheckoutInput): Promise<CheckoutResult> {
   })
 
   if (error) {
-    // The DB function raises 'Insufficient stock for product X'
-    if (error.message?.includes('Insufficient stock')) {
-      return { success: false, error: 'INSUFFICIENT_STOCK', details: error.message }
+    const msg = error.message ?? ''
+
+    if (msg.includes('Member not found') || msg.includes('Member not active')) {
+      return { success: false, error: 'MEMBER_NOT_ACTIVE' }
     }
-    return { success: false, error: 'CHECKOUT_FAILED', details: error.message }
+    if (msg.includes('Membership expired')) {
+      return { success: false, error: 'MEMBERSHIP_EXPIRED' }
+    }
+    if (msg.includes('Daily limit exceeded')) {
+      const match = msg.match(/Remaining: ([\d.]+)/)
+      return {
+        success: false,
+        error: 'DAILY_LIMIT_EXCEEDED',
+        remaining: match ? parseFloat(match[1]) : 0,
+      }
+    }
+    if (msg.includes('Monthly limit exceeded')) {
+      const match = msg.match(/Remaining: ([\d.]+)/)
+      return {
+        success: false,
+        error: 'MONTHLY_LIMIT_EXCEEDED',
+        remaining: match ? parseFloat(match[1]) : 0,
+      }
+    }
+    if (msg.includes('Insufficient stock')) {
+      return { success: false, error: 'INSUFFICIENT_STOCK', details: msg }
+    }
+
+    return { success: false, error: 'CHECKOUT_FAILED', details: msg }
   }
 
-  return { success: true, transactionId: data as string }
+  // Calculate points earned for the UI (same formula as DB)
+  const pointsEarned = Math.floor(totalAmount)
+
+  return { success: true, transactionId: data as string, pointsEarned }
 }

@@ -9,6 +9,7 @@ export interface MemberFormData {
   full_name: string
   document_type: 'dni' | 'nie' | 'passport'
   document_number: string
+  document_expiry: string | null
   date_of_birth: string
   phone: string | null
   email: string | null
@@ -68,6 +69,7 @@ export async function createMember(data: MemberFormData): Promise<
       full_name: data.full_name.trim(),
       document_type: data.document_type,
       document_number: data.document_number.trim().toUpperCase(),
+      document_expiry: data.document_expiry || null,
       date_of_birth: data.date_of_birth,
       phone: data.phone?.trim() || null,
       email: data.email?.trim().toLowerCase() || null,
@@ -117,6 +119,7 @@ export async function updateMember(id: string, data: MemberFormData): Promise<
       full_name: data.full_name.trim(),
       document_type: data.document_type,
       document_number: data.document_number.trim().toUpperCase(),
+      document_expiry: data.document_expiry || null,
       date_of_birth: data.date_of_birth,
       phone: data.phone?.trim() || null,
       email: data.email?.trim().toLowerCase() || null,

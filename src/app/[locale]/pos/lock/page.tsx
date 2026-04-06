@@ -38,7 +38,11 @@ export default function PosLockPage() {
       router.push(`/${locale}/pos`)
       router.refresh()
     } else {
-      setError(t('auth.invalid_pin'))
+      if (result.retryAfter) {
+        setError(`${t('auth.invalid_pin')} — ${result.retryAfter}s`)
+      } else {
+        setError(t('auth.invalid_pin'))
+      }
       setShake(true)
       setTimeout(() => setShake(false), 500)
       setPin('')

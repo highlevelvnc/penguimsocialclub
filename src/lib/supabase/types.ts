@@ -108,6 +108,7 @@ export type Database = {
           monthly_limit_grams: number
           notes: string | null
           loyalty_points: number
+          document_expiry: string | null
           created_at: string
           updated_at: string
         }

@@ -51,6 +51,61 @@ export async function checkInMember(
     return { success: true, checkInId: existingRows[0].id, alreadyCheckedIn: true }
   }
 
+  // Verify member age (must be 18+)
+  const { data: memberData } = await supabase
+    .from('members')
+    .select('date_of_birth, status, membership_end')
+    .eq('id', memberId)
+    .eq('shop_id', SHOP_ID)
+    .single()
+
+  if (!memberData) {
+    return { success: false, error: 'MEMBER_NOT_FOUND' }
+  }
+
+  const member = memberData as { date_of_birth: string; status: string; membership_end: string }
+
+  // Age check
+  const dob = new Date(member.date_of_birth)
+  const today = new Date()
+  let age = today.getFullYear() - dob.getFullYear()
+  const monthDiff = today.getMonth() - dob.getMonth()
+  if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
+    age--
+  }
+  if (age < 18) {
+    return { success: false, error: 'UNDERAGE' }
+  }
+
+  // Status check
+  if (member.status !== 'active') {
+    return { success: false, error: 'MEMBER_NOT_ACTIVE' }
+  }
+
+  if (new Date(member.membership_end) < today) {
+    return { success: false, error: 'MEMBERSHIP_EXPIRED' }
+  }
+
+  // Enforce max capacity
+  const { count } = await supabase
+    .from('check_ins')
+    .select('id', { count: 'exact', head: true })
+    .eq('shop_id', SHOP_ID)
+    .is('checked_out_at', null)
+
+  const { data: shopData } = await supabase
+    .from('shops')
+    .select('max_capacity')
+    .eq('id', SHOP_ID)
+    .single()
+
+  const currentOccupancy = count ?? 0
+  const maxCapacity = (shopData as { max_capacity: number } | null)?.max_capacity ?? 50
+
+  if (currentOccupancy >= maxCapacity) {
+    return { success: false, error: 'CAPACITY_FULL' }
+  }
+
   // Create new check-in
   const { data, error } = await supabase
     .from('check_ins')

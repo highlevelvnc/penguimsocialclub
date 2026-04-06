@@ -168,6 +168,7 @@ export default async function MemberDetailPage({
           full_name: member.full_name,
           document_type: member.document_type,
           document_number: member.document_number,
+          document_expiry: member.document_expiry,
           date_of_birth: member.date_of_birth,
           phone: member.phone,
           email: member.email,

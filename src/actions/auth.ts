@@ -2,7 +2,12 @@
 
 import bcrypt from 'bcryptjs'
 import { createAdminClient } from '@/lib/supabase/admin'
-import { setPinSession, clearPinSession } from '@/lib/session'
+import {
+  setPinSession,
+  clearPinSession,
+  checkPinRateLimit,
+  recordPinAttempt,
+} from '@/lib/session'
 import { SHOP_ID } from '@/lib/constants'
 
 interface StaffRow {
@@ -14,8 +19,18 @@ interface StaffRow {
 
 export async function validatePin(pin: string): Promise<
   | { success: true; staffName: string; role: 'admin' | 'attendant' }
-  | { success: false; error: string }
+  | { success: false; error: string; retryAfter?: number }
 > {
+  // Rate limit check
+  const rateCheck = await checkPinRateLimit()
+  if (!rateCheck.allowed) {
+    return {
+      success: false,
+      error: 'RATE_LIMITED',
+      retryAfter: rateCheck.retryAfterSeconds,
+    }
+  }
+
   if (!pin || pin.length < 4 || pin.length > 6) {
     return { success: false, error: 'INVALID_PIN' }
   }
@@ -37,6 +52,7 @@ export async function validatePin(pin: string): Promise<
   for (const s of staff) {
     const match = await bcrypt.compare(pin, s.pin_hash)
     if (match) {
+      await recordPinAttempt(true)
       await setPinSession({
         staffUserId: s.id,
         staffName: s.full_name,
@@ -47,6 +63,7 @@ export async function validatePin(pin: string): Promise<
     }
   }
 
+  await recordPinAttempt(false)
   return { success: false, error: 'INVALID_PIN' }
 }
 

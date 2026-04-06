@@ -26,6 +26,7 @@ interface MemberFormProps {
     full_name: string
     document_type: 'dni' | 'nie' | 'passport'
     document_number: string
+    document_expiry: string | null
     date_of_birth: string
     phone: string | null
     email: string | null
@@ -61,6 +62,7 @@ export function MemberForm({ mode, memberId, initialData, defaultLimits }: Membe
   const [fullName, setFullName] = useState(initialData?.full_name ?? '')
   const [documentType, setDocumentType] = useState<'dni' | 'nie' | 'passport'>(initialData?.document_type ?? 'dni')
   const [documentNumber, setDocumentNumber] = useState(initialData?.document_number ?? '')
+  const [documentExpiry, setDocumentExpiry] = useState(initialData?.document_expiry ?? '')
   const [dateOfBirth, setDateOfBirth] = useState(initialData?.date_of_birth ?? '')
   const [phone, setPhone] = useState(initialData?.phone ?? '')
   const [email, setEmail] = useState(initialData?.email ?? '')
@@ -91,6 +93,7 @@ export function MemberForm({ mode, memberId, initialData, defaultLimits }: Membe
       full_name: fullName,
       document_type: documentType,
       document_number: documentNumber,
+      document_expiry: documentExpiry || null,
       date_of_birth: dateOfBirth,
       phone: phone || null,
       email: email || null,
@@ -168,6 +171,18 @@ export function MemberForm({ mode, memberId, initialData, defaultLimits }: Membe
                 className="h-10 uppercase"
               />
             </div>
+          </div>
+
+          {/* Document expiry */}
+          <div className="space-y-1.5">
+            <Label htmlFor="doc_expiry" className="text-xs text-zinc-500">{t('member.document_expiry')}</Label>
+            <Input
+              id="doc_expiry"
+              type="date"
+              value={documentExpiry}
+              onChange={(e) => setDocumentExpiry(e.target.value)}
+              className="h-10"
+            />
           </div>
 
           {/* Date of birth */}

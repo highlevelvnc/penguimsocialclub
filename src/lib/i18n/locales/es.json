@@ -116,6 +116,7 @@
   "member.last_visit": "Última visita",
   "member.history": "Historial",
   "member.renew": "Renovar",
+  "member.document_expiry": "Vencimiento documento",
   "member.error.underage": "El socio debe ser mayor de 18 años",
   "member.error.duplicate_document": "Ya existe un socio con este documento",
 
@@ -250,6 +251,10 @@
   "checkin.member_left": "Salida registrada",
   "checkin.all_checked_out": "Todos los socios registrados salieron",
   "checkin.today_visits": "Visitas hoy",
+  "checkin.capacity_full": "Club lleno — capacidad máxima alcanzada",
+  "checkin.underage": "Socio menor de edad — acceso denegado",
+
+  "auth.rate_limited": "Demasiados intentos. Espera {seconds}s",
 
   "receipt.title": "Recibo",
   "receipt.member": "Socio",

@@ -116,6 +116,7 @@
   "member.last_visit": "Last visit",
   "member.history": "History",
   "member.renew": "Renew",
+  "member.document_expiry": "Document expiry",
   "member.error.underage": "Member must be 18 or older",
   "member.error.duplicate_document": "A member with this document already exists",
 
@@ -250,6 +251,10 @@
   "checkin.member_left": "Member checked out",
   "checkin.all_checked_out": "All members checked out",
   "checkin.today_visits": "Visits today",
+  "checkin.capacity_full": "Club full — maximum capacity reached",
+  "checkin.underage": "Underage member — access denied",
+
+  "auth.rate_limited": "Too many attempts. Wait {seconds}s",
 
   "receipt.title": "Receipt",
   "receipt.member": "Member",
