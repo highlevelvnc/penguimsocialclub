@@ -9,10 +9,14 @@ interface Props {
   remainingDaily: number
   remainingMonthly: number
   memberName: string
+  memberPoints: number
+  euroPerPoint: number
   checkingOut: boolean
+  discount: number
   onRemoveItem: (cartItemId: string) => void
   onClear: () => void
   onCheckout: (method: 'cash' | 'card') => void
+  onToggleDiscount: () => void
 }
 
 export function CartPanel({
@@ -20,14 +24,21 @@ export function CartPanel({
   remainingDaily,
   remainingMonthly,
   memberName,
+  memberPoints,
+  euroPerPoint,
   checkingOut,
+  discount,
   onRemoveItem,
   onClear,
   onCheckout,
+  onToggleDiscount,
 }: Props) {
   const t = useT()
   const isEmpty = cart.items.length === 0
   const [confirmClear, setConfirmClear] = useState(false)
+
+  const finalTotal = Math.max(0, cart.totalAmount - discount)
+  const canRedeem = memberPoints > 0 && !isEmpty
 
   return (
     <div className="flex h-full flex-col border-l border-zinc-800 bg-zinc-900">
@@ -139,12 +150,51 @@ export function CartPanel({
           </div>
         )}
 
-        {/* Total */}
-        <div className="flex items-center justify-between px-4 py-3 border-t border-zinc-800/50">
-          <span className="text-sm font-bold text-zinc-300">{t('pos.total')}</span>
-          <span key={cart.totalAmount} className="text-2xl font-bold text-white tabular-nums animate-count-pop">
-            {'\u20AC'}{cart.totalAmount.toFixed(2)}
-          </span>
+        {/* Loyalty points redemption */}
+        {canRedeem && (
+          <div className="px-4 py-2.5 border-t border-zinc-800/50">
+            <button
+              type="button"
+              onClick={onToggleDiscount}
+              className={`w-full flex items-center justify-between rounded-lg px-3 py-2 text-xs transition-all ${
+                discount > 0
+                  ? 'bg-amber-500/15 border border-amber-500/30 text-amber-300'
+                  : 'bg-zinc-800/50 border border-zinc-700/50 text-zinc-400 hover:border-amber-500/30 hover:text-amber-400'
+              }`}
+            >
+              <span className="flex items-center gap-1.5">
+                <span>⭐</span>
+                <span className="font-medium">{memberPoints} pts</span>
+              </span>
+              {discount > 0 ? (
+                <span className="font-bold tabular-nums">-{'\u20AC'}{discount.toFixed(2)}</span>
+              ) : (
+                <span>{t('loyalty.redeem')}</span>
+              )}
+            </button>
+          </div>
+        )}
+
+        {/* Subtotal + discount + total */}
+        <div className="px-4 py-3 border-t border-zinc-800/50 space-y-1.5">
+          {discount > 0 && (
+            <>
+              <div className="flex items-center justify-between text-xs">
+                <span className="text-zinc-500">Subtotal</span>
+                <span className="text-zinc-400 tabular-nums">{'\u20AC'}{cart.totalAmount.toFixed(2)}</span>
+              </div>
+              <div className="flex items-center justify-between text-xs">
+                <span className="text-amber-400">⭐ {t('loyalty.redeem')}</span>
+                <span className="text-amber-400 font-semibold tabular-nums">-{'\u20AC'}{discount.toFixed(2)}</span>
+              </div>
+            </>
+          )}
+          <div className="flex items-center justify-between">
+            <span className="text-sm font-bold text-zinc-300">{t('pos.total')}</span>
+            <span key={finalTotal} className="text-2xl font-bold text-white tabular-nums animate-count-pop">
+              {'\u20AC'}{finalTotal.toFixed(2)}
+            </span>
+          </div>
         </div>
 
         {/* Checkout buttons */}

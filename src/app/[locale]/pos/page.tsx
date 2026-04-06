@@ -10,6 +10,7 @@ import { addToCart, removeFromCart, clearCart, EMPTY_CART, type CartState } from
 import { getRemainingLimits, checkLimit, type MemberLimits } from '@/lib/pos/limits'
 import { checkout } from '@/actions/pos'
 import { checkInMember } from '@/actions/checkin'
+import { getLoyaltyConfig, redeemPoints } from '@/actions/loyalty'
 import { PosMemberSearch } from '@/components/pos/member-search'
 import { PosMemberCard } from '@/components/pos/member-card'
 import { PosProductGrid } from '@/components/pos/product-grid'
@@ -37,6 +38,11 @@ export default function PosPage() {
   const [products, setProducts] = useState<Product[]>([])
   const [subcategories, setSubcategories] = useState<SubcategoryInfo[]>([])
   const [checkingOut, setCheckingOut] = useState(false)
+  const [loyaltyDiscount, setLoyaltyDiscount] = useState(0)
+  const [loyaltyPointsToRedeem, setLoyaltyPointsToRedeem] = useState(0)
+
+  // Loyalty config (loaded with products)
+  const [euroPerPoint, setEuroPerPoint] = useState(0.10)
 
   // Checkout confirmation data
   const [confirmationData, setConfirmationData] = useState<{
@@ -78,6 +84,27 @@ export default function PosPage() {
     }).catch(() => {
       toast.error(t('pos.error.checkout_failed'))
     })
+
+    // Load loyalty config
+    getLoyaltyConfig().then((config) => {
+      setEuroPerPoint(config.euroPerPoint)
+    })
+  }
+
+  // -- Loyalty discount toggle --
+  function handleToggleDiscount() {
+    if (loyaltyDiscount > 0) {
+      // Turn off
+      setLoyaltyDiscount(0)
+      setLoyaltyPointsToRedeem(0)
+    } else if (member) {
+      // Turn on — use all points up to cart total
+      const maxDiscount = Math.round(member.loyalty_points * euroPerPoint * 100) / 100
+      const actualDiscount = Math.min(maxDiscount, cart.totalAmount)
+      const pointsNeeded = Math.ceil(actualDiscount / euroPerPoint)
+      setLoyaltyDiscount(actualDiscount)
+      setLoyaltyPointsToRedeem(pointsNeeded)
+    }
   }
 
   // -- Member selection --
@@ -199,6 +226,8 @@ export default function PosPage() {
 
   function handleClearCart() {
     setCart(clearCart())
+    setLoyaltyDiscount(0)
+    setLoyaltyPointsToRedeem(0)
   }
 
   // -- Real checkout --
@@ -240,6 +269,11 @@ export default function PosPage() {
       return
     }
 
+    // Redeem loyalty points if discount was applied
+    if (loyaltyPointsToRedeem > 0 && loyaltyDiscount > 0) {
+      await redeemPoints(member.id, loyaltyPointsToRedeem)
+    }
+
     // Success — show confirmation (loyalty points earned atomically in DB)
     setConfirmationData({
       transactionId: result.transactionId,
@@ -261,6 +295,8 @@ export default function PosPage() {
     setLastVisit(null)
     setCart(clearCart())
     setConfirmationData(null)
+    setLoyaltyDiscount(0)
+    setLoyaltyPointsToRedeem(0)
 
     // Refetch products (updated stock after checkout)
     loadProducts()
@@ -272,6 +308,8 @@ export default function PosPage() {
     setLimits(null)
     setLastVisit(null)
     setCart(clearCart())
+    setLoyaltyDiscount(0)
+    setLoyaltyPointsToRedeem(0)
   }
 
   // -- Remaining limits (real-time, accounts for cart) --
@@ -374,10 +412,14 @@ export default function PosPage() {
           remainingDaily={remaining.daily}
           remainingMonthly={remaining.monthly}
           memberName={member.full_name}
+          memberPoints={member.loyalty_points}
+          euroPerPoint={euroPerPoint}
           checkingOut={checkingOut}
+          discount={loyaltyDiscount}
           onRemoveItem={handleRemoveItem}
           onClear={handleClearCart}
           onCheckout={handleCheckout}
+          onToggleDiscount={handleToggleDiscount}
         />
       </div>
     </div>

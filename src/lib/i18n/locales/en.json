@@ -256,6 +256,14 @@
 
   "auth.rate_limited": "Too many attempts. Wait {seconds}s",
 
+  "report.title": "Reports",
+  "report.monthly_description": "Monthly operations summary",
+  "report.select_month": "Month",
+  "report.generate": "Generate",
+  "report.avg_transaction": "Avg. transaction",
+  "report.new_members": "New",
+  "report.daily_breakdown": "Daily breakdown",
+
   "receipt.title": "Receipt",
   "receipt.member": "Member",
   "receipt.date": "Date",

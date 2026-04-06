@@ -256,6 +256,14 @@
 
   "auth.rate_limited": "Demasiadas tentativas. Espera {seconds}s",
 
+  "report.title": "Relatórios",
+  "report.monthly_description": "Resumo mensal de operações",
+  "report.select_month": "Mês",
+  "report.generate": "Gerar",
+  "report.avg_transaction": "Ticket médio",
+  "report.new_members": "Novos",
+  "report.daily_breakdown": "Detalhe diário",
+
   "receipt.title": "Recibo",
   "receipt.member": "Sócio",
   "receipt.date": "Data",
