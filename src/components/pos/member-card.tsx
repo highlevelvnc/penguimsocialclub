@@ -41,9 +41,9 @@ export function PosMemberCard({
   const initials = member.full_name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase()
 
   return (
-    <div className="rounded-xl border border-zinc-800/60 bg-zinc-900/80 overflow-hidden animate-fade-in-up backdrop-blur-sm">
+    <div className="rounded-xl border border-zinc-700/40 bg-gradient-to-b from-zinc-800/60 to-zinc-900/80 overflow-hidden animate-fade-in-up backdrop-blur-sm shadow-lg shadow-black/10">
       {/* Top bar with member info */}
-      <div className="flex items-center justify-between px-4 py-2.5 bg-zinc-800/40 border-b border-zinc-800/60">
+      <div className="flex items-center justify-between px-4 py-3 bg-zinc-800/30 border-b border-zinc-700/30">
         <div className="flex items-center gap-3">
           <div className="flex h-8 w-8 items-center justify-center rounded-full bg-emerald-500/15 text-emerald-400 font-bold text-xs">
             {initials}
@@ -84,7 +84,7 @@ export function PosMemberCard({
               {remainingDaily}g
             </span>
           </div>
-          <div className="h-1.5 rounded-full bg-zinc-800 overflow-hidden">
+          <div className="h-2 rounded-full bg-zinc-700/50 overflow-hidden">
             <div
               className={`h-full rounded-full transition-all duration-300 ${barColor(dailyPct)}`}
               style={{ width: `${dailyPct}%` }}
@@ -103,7 +103,7 @@ export function PosMemberCard({
               {remainingMonthly}g
             </span>
           </div>
-          <div className="h-1.5 rounded-full bg-zinc-800 overflow-hidden">
+          <div className="h-2 rounded-full bg-zinc-700/50 overflow-hidden">
             <div
               className={`h-full rounded-full transition-all duration-300 ${barColor(monthlyPct)}`}
               style={{ width: `${monthlyPct}%` }}

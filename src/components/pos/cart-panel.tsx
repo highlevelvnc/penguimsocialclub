@@ -41,7 +41,7 @@ export function CartPanel({
   const canRedeem = memberPoints > 0 && !isEmpty
 
   return (
-    <div className="flex h-full flex-col border-l border-zinc-800 bg-zinc-900">
+    <div className="flex h-full flex-col border-l border-zinc-700/30 bg-gradient-to-b from-zinc-900 to-zinc-950">
       {/* Header */}
       <div className="flex items-center justify-between border-b border-zinc-800 px-4 py-2.5">
         <div className="flex items-center gap-2">
@@ -189,7 +189,7 @@ export function CartPanel({
               </div>
             </>
           )}
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between rounded-lg bg-zinc-800/40 px-3 py-2">
             <span className="text-sm font-bold text-zinc-300">{t('pos.total')}</span>
             <span key={finalTotal} className="text-2xl font-bold text-white tabular-nums animate-count-pop">
               {'\u20AC'}{finalTotal.toFixed(2)}

@@ -92,7 +92,7 @@ export function PosProductGrid({
   }
 
   return (
-    <div className="flex h-full flex-col overflow-hidden rounded-t-2xl border border-zinc-800 bg-zinc-900/50">
+    <div className="flex h-full flex-col overflow-hidden rounded-t-2xl border border-zinc-700/30 bg-zinc-900/40">
       {/* Search + Category tabs */}
       <div className="flex items-center gap-2 border-b border-zinc-800 px-3 py-2 overflow-x-auto bg-zinc-900/80">
         {/* Quick search */}
@@ -105,7 +105,7 @@ export function PosProductGrid({
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder={t('common.search')}
-            className="h-7 w-28 rounded-lg border border-zinc-700/50 bg-zinc-800/50 pl-8 pr-2 text-xs text-white placeholder:text-zinc-600 outline-none focus:w-40 focus:border-emerald-500/30 focus:ring-1 focus:ring-emerald-500/10 transition-all"
+            className="h-8 w-32 rounded-lg border border-zinc-600/40 bg-zinc-800/70 pl-8 pr-6 text-xs text-white placeholder:text-zinc-500 outline-none focus:w-44 focus:border-emerald-500/40 focus:ring-2 focus:ring-emerald-500/10 transition-all"
           />
           {searchQuery && (
             <button
@@ -130,25 +130,25 @@ export function PosProductGrid({
               type="button"
               onClick={() => { setActiveCategory(cat); setSelectedProduct(null); setSearchQuery('') }}
               className={`
-                flex items-center gap-2 whitespace-nowrap rounded-xl px-3 py-1.5 text-xs font-medium transition-all
+                flex items-center gap-2 whitespace-nowrap rounded-xl px-3.5 py-2 text-xs font-medium transition-all
                 ${isSearching
-                  ? 'text-zinc-600 opacity-50'
+                  ? 'text-zinc-600 opacity-40'
                   : isActive
-                    ? 'bg-zinc-800 text-white shadow-sm ring-1 ring-zinc-700'
-                    : 'text-zinc-500 hover:bg-zinc-800/50 hover:text-zinc-300'}
+                    ? 'bg-zinc-700/60 text-white shadow-sm ring-1 ring-zinc-600/50'
+                    : 'text-zinc-400 hover:bg-zinc-800/60 hover:text-zinc-200'}
               `}
             >
-              <div className="relative h-5 w-5 flex-shrink-0 overflow-hidden rounded">
+              <div className="relative h-6 w-6 flex-shrink-0 overflow-hidden rounded-md">
                 <Image
                   src={categoryImages[cat]}
                   alt=""
-                  width={20}
-                  height={20}
+                  width={24}
+                  height={24}
                   className="h-full w-full object-cover"
                 />
               </div>
               {t(`product.category.${cat}`)}
-              <span className={`text-[10px] ${isActive ? 'text-zinc-400' : 'text-zinc-600'}`}>
+              <span className={`rounded-full bg-zinc-800/60 px-1.5 py-0.5 text-[10px] ${isActive ? 'text-zinc-300 bg-zinc-600/40' : 'text-zinc-600'}`}>
                 {count}
               </span>
             </button>
