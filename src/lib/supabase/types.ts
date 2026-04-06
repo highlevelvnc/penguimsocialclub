@@ -381,6 +381,29 @@ export type Database = {
           notes?: string | null
         }
       }
+      check_ins: {
+        Row: {
+          id: string
+          shop_id: string
+          member_id: string
+          checked_in_by: string
+          checked_in_at: string
+          checked_out_at: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          shop_id: string
+          member_id: string
+          checked_in_by: string
+          checked_in_at?: string
+          checked_out_at?: string | null
+          created_at?: string
+        }
+        Update: {
+          checked_out_at?: string | null
+        }
+      }
     }
     Functions: {
       execute_checkout: {
@@ -438,3 +461,4 @@ export type TransactionItem = Database['public']['Tables']['transaction_items'][
 export type StockAdjustment = Database['public']['Tables']['stock_adjustments']['Row']
 export type DailyClose = Database['public']['Tables']['daily_closes']['Row']
 export type Subcategory = Database['public']['Tables']['subcategories']['Row']
+export type CheckIn = Database['public']['Tables']['check_ins']['Row']

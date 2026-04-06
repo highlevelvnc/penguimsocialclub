@@ -9,6 +9,7 @@ import type { Member, Product } from '@/lib/supabase/types'
 import { addToCart, removeFromCart, clearCart, EMPTY_CART, type CartState } from '@/lib/pos/cart'
 import { getRemainingLimits, checkLimit, type MemberLimits } from '@/lib/pos/limits'
 import { checkout } from '@/actions/pos'
+import { checkInMember } from '@/actions/checkin'
 import { PosMemberSearch } from '@/components/pos/member-search'
 import { PosMemberCard } from '@/components/pos/member-card'
 import { PosProductGrid } from '@/components/pos/product-grid'
@@ -79,6 +80,14 @@ export default function PosPage() {
     setCart(clearCart())
 
     const supabase = createClient()
+
+    // Auto check-in the member
+    const checkInResult = await checkInMember(selectedMember.id)
+    if (checkInResult.success) {
+      if (!checkInResult.alreadyCheckedIn) {
+        toast.success(t('checkin.member_entered'))
+      }
+    }
 
     // Fetch dispensing totals
     const [todayRes, monthRes] = await Promise.all([
